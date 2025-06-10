@@ -1,0 +1,8 @@
+input:focus {
+    box-shadow: none;
+}
+
+.placeholder-image {
+    background-size: cover;
+    background-position: center;
+}

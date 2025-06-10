@@ -1,0 +1,50 @@
+<header class="border-bottom shadow-sm">
+    <nav class="navbar navbar-expand-lg bg-white">
+      <div class="container-fluid">
+  
+        <!-- Logo + nombre -->
+        <a class="navbar-brand d-flex align-items-center gap-2 text-primary fw-bold" routerLink="/">
+          <i class="bi bi-briefcase-fill fs-4"></i> Bolsa de Trabajo
+        </a>
+  
+        <!-- Botón hamburguesa en pantallas pequeñas -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+          aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <!-- Enlaces de navegación -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3">
+            <li class="nav-item">
+              <a class="nav-link text-primary" routerLink="/inicio">Empleos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-primary" routerLink="/empresas">Empresas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-primary" routerLink="/candidatos">Candidatos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-primary" routerLink="/recursos">Recursos</a>
+            </li>
+          </ul>
+  
+          <!-- Botones a la derecha -->
+          <div class="d-flex gap-2">
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle text-primary mt-1" href="#" id="registerDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Registrarse
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="registerDropdown">
+                    <li><a class="dropdown-item" routerLink="/registro-candidatos">Registro de Candidatos</a></li>
+                    <li><a class="dropdown-item" routerLink="/registro-empresas">Registro de Empresas</a></li>
+                </ul>
+            </div>
+            <a class="btn btn-outline-primary" routerLink="/login">Iniciar Sesión</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  

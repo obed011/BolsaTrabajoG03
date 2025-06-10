@@ -1,0 +1,236 @@
+<app-header></app-header>
+<!-- registro-empresa.component.html -->
+<div class="container-fluid min-vh-100 d-flex">
+  <div class="row flex-fill">
+
+    <!-- Lado izquierdo: Formulario -->
+    <div class="col-lg-7 d-flex align-items-center justify-content-center">
+      <div class="w-90 px-4">
+        <h2 class="text-center text-primary fw-bold mb-1">Registra tu empresa</h2>
+        <p class="text-center text-muted mb-4">Encuentra el talento que necesitas para hacer crecer tu negocio</p>
+
+        <!-- Mensajes de error y éxito -->
+        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+        </div>
+
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          {{ successMessage }}
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <!-- Información de Acceso -->
+          <h5 class="fw-semibold text-primary">Información de Acceso</h5>
+          <hr>
+          
+          <div class="mb-3">
+            <label class="form-label">Correo electrónico *</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input 
+                type="email" 
+                class="form-control bg-info"
+                [class.is-invalid]="correo?.invalid && correo?.touched"
+                placeholder="correo@empresa.com"
+                formControlName="correo">
+            </div>
+            <div *ngIf="correo?.invalid && correo?.touched" class="invalid-feedback d-block">
+              {{ getCorreoError() }}
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Contraseña *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input 
+                  [type]="showPassword ? 'text' : 'password'" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="contrasena?.invalid && contrasena?.touched"
+                  placeholder="Mínimo 6 caracteres"
+                  formControlName="contrasena">
+                <button type="button" class="input-group-text" (click)="togglePassword()">
+                  <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="contrasena?.invalid && contrasena?.touched" class="invalid-feedback d-block">
+                {{ getContrasenaError() }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Confirmar contraseña *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input 
+                  [type]="showConfirmPassword ? 'text' : 'password'" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="(confirmarContrasena?.invalid && confirmarContrasena?.touched) || (registerForm.hasError('passwordMismatch') && confirmarContrasena?.touched)"
+                  placeholder="Repite tu contraseña"
+                  formControlName="confirmarContrasena">
+                <button type="button" class="input-group-text" (click)="toggleConfirmPassword()">
+                  <i [ngClass]="showConfirmPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="(confirmarContrasena?.invalid && confirmarContrasena?.touched) || (registerForm.hasError('passwordMismatch') && confirmarContrasena?.touched)" class="invalid-feedback d-block">
+                {{ getConfirmarContrasenaError() }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Información de la Empresa -->
+          <h5 class="fw-semibold text-primary mt-4">Información de la Empresa</h5>
+          <hr>
+
+          <div class="mb-3">
+            <label class="form-label">Nombre de la empresa *</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-building"></i></span>
+              <input 
+                type="text" 
+                class="form-control bg-info"
+                [class.is-invalid]="nombreEmpresa?.invalid && nombreEmpresa?.touched"
+                placeholder="Nombre de tu empresa"
+                formControlName="nombreEmpresa">
+            </div>
+            <div *ngIf="nombreEmpresa?.invalid && nombreEmpresa?.touched" class="invalid-feedback d-block">
+              {{ getNombreEmpresaError() }}
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">NIT</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                <input 
+                  type="text" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="nitEmpresa?.invalid && nitEmpresa?.touched"
+                  placeholder="XXXX-XXXXXX-XXX-X"
+                  formControlName="nitEmpresa">
+              </div>
+              <div *ngIf="nitEmpresa?.invalid && nitEmpresa?.touched" class="invalid-feedback d-block">
+                {{ getNitEmpresaError() }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Rubro *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-briefcase"></i></span>
+                <select 
+                  class="form-select bg-info"
+                  [class.is-invalid]="rubroEmpresa?.invalid && rubroEmpresa?.touched"
+                  formControlName="rubroEmpresa">
+                  <option value="" disabled>Selecciona el rubro</option>
+                  <option *ngFor="let rubro of rubros" [value]="rubro">{{ rubro }}</option>
+                </select>
+              </div>
+              <div *ngIf="rubroEmpresa?.invalid && rubroEmpresa?.touched" class="invalid-feedback d-block">
+                {{ getRubroEmpresaError() }}
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Teléfono</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                <input 
+                  type="tel" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="telefonoEmpresa?.invalid && telefonoEmpresa?.touched"
+                  placeholder="XXXX-XXXX"
+                  formControlName="telefonoEmpresa">
+              </div>
+              <div *ngIf="telefonoEmpresa?.invalid && telefonoEmpresa?.touched" class="invalid-feedback d-block">
+                {{ getTelefonoEmpresaError() }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Sitio web</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-globe"></i></span>
+                <input 
+                  type="url" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="sitioWeb?.invalid && sitioWeb?.touched"
+                  placeholder="https://www.ejemplo.com"
+                  formControlName="sitioWeb">
+              </div>
+              <div *ngIf="sitioWeb?.invalid && sitioWeb?.touched" class="invalid-feedback d-block">
+                {{ getSitioWebError() }}
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Dirección</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+              <input 
+                type="text" 
+                class="form-control bg-info"
+                [class.is-invalid]="direccionEmpresa?.invalid && direccionEmpresa?.touched"
+                placeholder="Dirección de la empresa"
+                formControlName="direccionEmpresa">
+            </div>
+            <div *ngIf="direccionEmpresa?.invalid && direccionEmpresa?.touched" class="invalid-feedback d-block">
+              {{ getDireccionEmpresaError() }}
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Descripción de la empresa</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-text-paragraph"></i></span>
+              <textarea 
+                class="form-control bg-info"
+                [class.is-invalid]="descripcion?.invalid && descripcion?.touched"
+                placeholder="Describe brevemente tu empresa, sus valores y lo que la hace especial..."
+                rows="4"
+                formControlName="descripcion"></textarea>
+            </div>
+            <div *ngIf="descripcion?.invalid && descripcion?.touched" class="invalid-feedback d-block">
+              {{ getDescripcionError() }}
+            </div>
+          </div>
+
+          <div class="d-grid mb-3">
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              [disabled]="loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ loading ? 'Registrando empresa...' : 'Registrar empresa' }}
+            </button>
+          </div>
+
+          <div class="text-center">
+            <small class="text-muted">¿Ya tienes una cuenta? <a routerLink="/login"
+                class="text-primary fw-semibold text-decoration-none">Inicia sesión aquí</a></small>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Lado derecho: Imagen o beneficios -->
+    <div class="col-lg-5 d-none d-lg-flex bg-secondary align-items-center justify-content-center flex-column text-center text-primary">
+      <div class="placeholder-image mb-3" style="width: 260px; height: 260px; background-image: url('static/empresaIcono.png'); background-size: cover; background-position: center;"></div>
+      <h5 class="fw-bold">¿Por qué registrar tu empresa?</h5>
+      <ul class="list-unstyled text-start px-4">
+        <li><i class="bi bi-check text-primary me-2"></i>Acceso a miles de candidatos calificados</li>
+        <li><i class="bi bi-check text-primary me-2"></i>Herramientas de gestión de vacantes</li>
+        <li><i class="bi bi-check text-primary me-2"></i>Filtros avanzados de búsqueda</li>
+        <li><i class="bi bi-check text-primary me-2"></i>Comunicación directa con postulantes</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+<app-footer></app-footer>

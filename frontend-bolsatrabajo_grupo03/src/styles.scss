@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+$primary: #44749D;   // Azul oscuro
+$secondary: #C6D4E1;   // Gris claro
+$info: #EBE7E0;       // Cyan oscuro
+$success: #43a047;    // Verde
+$warning: #ffb300;    // Amarillo
+$danger: #e53935;     // Rojo
+$light: #f5f5f5;      // Gris claro
+$dark: #212121;       // Gris oscuro
+
+// Importa Bootstrap después de definir las variables
+@import "bootstrap/scss/bootstrap";

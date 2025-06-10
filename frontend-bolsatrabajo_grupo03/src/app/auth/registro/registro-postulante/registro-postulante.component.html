@@ -1,0 +1,243 @@
+<app-header></app-header>
+<!-- registro-postulante.component.html -->
+<div class="container-fluid min-vh-100 d-flex">
+  <div class="row flex-fill">
+
+    <!-- Lado izquierdo: Formulario -->
+    <div class="col-lg-7 d-flex align-items-center justify-content-center">
+      <div class="w-90 px-4">
+        <h2 class="text-center text-primary fw-bold mb-1">Únete a nuestra comunidad</h2>
+        <p class="text-center text-muted mb-4">Crea tu perfil y encuentra las mejores oportunidades laborales</p>
+
+        <!-- Mensajes de error y éxito -->
+        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+        </div>
+
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          {{ successMessage }}
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <!-- Información Personal -->
+          <h5 class="fw-semibold text-primary">Información Personal</h5>
+          <hr>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Nombres *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input 
+                  type="text" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="nombres?.invalid && nombres?.touched"
+                  placeholder="Tus nombres"
+                  formControlName="nombres">
+              </div>
+              <div *ngIf="nombres?.invalid && nombres?.touched" class="invalid-feedback d-block">
+                {{ getNombresError() }}
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Apellidos *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input 
+                  type="text" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="apellidos?.invalid && apellidos?.touched"
+                  placeholder="Tus apellidos"
+                  formControlName="apellidos">
+              </div>
+              <div *ngIf="apellidos?.invalid && apellidos?.touched" class="invalid-feedback d-block">
+                {{ getApellidosError() }}
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Correo electrónico *</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input 
+                type="email" 
+                class="form-control bg-info"
+                [class.is-invalid]="correo?.invalid && correo?.touched"
+                placeholder="correo@ejemplo.com"
+                formControlName="correo">
+            </div>
+            <div *ngIf="correo?.invalid && correo?.touched" class="invalid-feedback d-block">
+              {{ getEmailError() }}
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Contraseña *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input 
+                  [type]="showPassword ? 'text' : 'password'" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="contrasena?.invalid && contrasena?.touched"
+                  placeholder="Mínimo 6 caracteres"
+                  formControlName="contrasena">
+                <button type="button" class="input-group-text" (click)="togglePassword()">
+                  <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="contrasena?.invalid && contrasena?.touched" class="invalid-feedback d-block">
+                {{ getPasswordError() }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Confirmar contraseña *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input 
+                  [type]="showConfirmPassword ? 'text' : 'password'" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="(confirmarContrasena?.invalid && confirmarContrasena?.touched) || (registerForm.hasError('passwordMismatch') && confirmarContrasena?.touched)"
+                  placeholder="Repite tu contraseña"
+                  formControlName="confirmarContrasena">
+                <button type="button" class="input-group-text" (click)="toggleConfirmPassword()">
+                  <i [ngClass]="showConfirmPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="(confirmarContrasena?.invalid && confirmarContrasena?.touched) || (registerForm.hasError('passwordMismatch') && confirmarContrasena?.touched)" class="invalid-feedback d-block">
+                {{ getConfirmPasswordError() }}
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Fecha de nacimiento *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                <input 
+                  type="date" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="fechaNacimiento?.invalid && fechaNacimiento?.touched"
+                  formControlName="fechaNacimiento">
+              </div>
+              <div *ngIf="fechaNacimiento?.invalid && fechaNacimiento?.touched" class="invalid-feedback d-block">
+                {{ getFechaNacimientoError() }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Género *</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
+                <select 
+                  class="form-select bg-info"
+                  [class.is-invalid]="genero?.invalid && genero?.touched"
+                  formControlName="genero">
+                  <option value="" disabled>Selecciona tu género</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                  <option value="Otro">Otro</option>
+                  <option value="Prefiero no decir">Prefiero no decir</option>
+                </select>
+              </div>
+              <div *ngIf="genero?.invalid && genero?.touched" class="invalid-feedback d-block">
+                {{ getGeneroError() }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Información adicional opcional -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Teléfono</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                <input 
+                  type="tel" 
+                  class="form-control bg-info"
+                  [class.is-invalid]="telefono?.invalid && telefono?.touched"
+                  placeholder="9 a 15 dígitos"
+                  formControlName="telefono">
+              </div>
+              <div *ngIf="telefono?.invalid && telefono?.touched" class="invalid-feedback d-block">
+                {{ getTelefonoError() }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Dirección</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                <input 
+                  type="text" 
+                  class="form-control bg-info"
+                  placeholder="Tu dirección (opcional)"
+                  formControlName="direccion">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-check mb-2">
+            <input 
+              class="form-check-input" 
+              [class.is-invalid]="terminos?.invalid && terminos?.touched"
+              type="checkbox" 
+              id="terminos"
+              formControlName="terminos">
+            <label class="form-check-label" for="terminos">
+              Acepto los <a href="#" class="text-primary text-decoration-underline">términos y condiciones</a>
+              y la <a href="#" class="text-primary text-decoration-underline">política de privacidad</a> *
+            </label>
+            <div *ngIf="terminos?.invalid && terminos?.touched" class="invalid-feedback d-block">
+              {{ getTerminosError() }}
+            </div>
+          </div>
+
+          <div class="form-check mb-4">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              id="notificaciones"
+              formControlName="notificaciones">
+            <label class="form-check-label" for="notificaciones">
+              Quiero recibir notificaciones sobre nuevas oportunidades laborales y consejos de carrera
+            </label>
+          </div>
+
+          <div class="d-grid mb-3">
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              [disabled]="loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ loading ? 'Creando cuenta...' : 'Crear cuenta' }}
+            </button>
+          </div>
+
+          <div class="text-center">
+            <small class="text-muted">¿Ya tienes una cuenta? <a routerLink="/login"
+                class="text-primary fw-semibold text-decoration-none">Inicia sesión aquí</a></small>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Lado derecho: Imagen o beneficios -->
+    <div class="col-lg-5 d-none d-lg-flex bg-secondary align-items-center justify-content-center flex-column text-center text-primary">
+      <div class="placeholder-image mb-3" style="width: 260px; height: 260px; background-image: url('static/empleoIcono.png'); background-size: cover; background-position: center;"></div>
+      <h5 class="fw-bold">¿Por qué registrarte?</h5>
+      <ul class="list-unstyled text-start px-4">
+        <li><i class="bi bi-check text-primary me-2"></i>Acceso a miles de ofertas laborales</li>
+        <li><i class="bi bi-check text-primary me-2"></i>Alertas personalizadas de empleo</li>
+        <li><i class="bi bi-check text-primary me-2"></i>Perfil profesional destacado</li>
+        <li><i class="bi bi-check text-primary me-2"></i>Conexión directa con empresas</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+<app-footer></app-footer>

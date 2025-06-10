@@ -1,0 +1,86 @@
+<!-- sidebar.component.html -->
+<div class="sidebar-container">
+  <!-- Overlay para móviles -->
+  <div class="overlay" [class.show]="!isCollapsed && isMobile" (click)="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" [class.collapsed]="isCollapsed && !isMobile" [class.show]="!isCollapsed && isMobile">
+
+    <!-- Header del sidebar -->
+    <div class="sidebar-header">
+      <div class="user-info">
+        <div class="user-avatar">JP</div>
+        <div class="user-details">
+          <h6>Juan Pérez</h6>
+          <small>Desarrollador Frontend</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido del sidebar con scroll -->
+    <div class="sidebar-content" style="overflow-y: auto; max-height: 90vh;">
+      <!-- Sección Mi Perfil -->
+      <div class="px-3 py-2">
+        <small class="text-muted fw-bold">MI PERFIL</small>
+      </div>
+
+      <!-- Menú principal -->
+      <ul class="sidebar-menu">
+        <li *ngFor="let item of menuItems">
+          <a [routerLink]="item.route" [class.active]="isActive(item.id)" (click)="setActiveMenuItem(item.id)"
+            routerLinkActive="active">
+            <i [class]="item.icon"></i>
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Footer del sidebar -->
+    <div class="sidebar-footer">
+      <ul class="sidebar-menu">
+        <li *ngFor="let item of footerItems">
+          <a *ngIf="item.id !== 'cerrar-sesion'" [routerLink]="item.route" [class.active]="isActive(item.id)" (click)="setActiveMenuItem(item.id)">
+            <i [class]="item.icon"></i>
+            {{ item.label }}
+          </a>
+          <a *ngIf="item.id === 'cerrar-sesion'" (click)="logout()" [class.active]="isActive(item.id)" style="cursor: pointer;">
+            <i [class]="item.icon"></i>
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="main-content" [class.expanded]="isCollapsed && !isMobile">
+
+    <!-- Navbar superior -->
+    <nav class="top-navbar">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <button class="toggle-sidebar me-3" (click)="toggleSidebar()">
+            <i class="bi bi-list"></i>
+          </button>
+          <span class="navbar-brand mb-0">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard del Candidato
+          </span>
+        </div>
+        <div>
+          <button class="btn btn-outline-primary">
+            <i class="bi bi-eye me-2"></i>Ver CV
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenido de la página -->
+    <div class="page-content">
+     <router-outlet></router-outlet>
+    </div>
+    <!-- fin de contenido-->
+    
+  </div>
+</div>
