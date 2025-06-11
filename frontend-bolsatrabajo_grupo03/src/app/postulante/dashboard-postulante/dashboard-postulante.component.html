@@ -8,14 +8,21 @@
 
     <!-- Header del sidebar -->
     <div class="sidebar-header">
-      <div class="user-info">
-        <div class="user-avatar">JP</div>
-        <div class="user-details">
-          <h6>Juan Pérez</h6>
-          <small>Desarrollador Frontend</small>
-        </div>
-      </div>
+  <div class="user-info">
+    <div class="user-avatar">
+      {{ (currentUser?.postulante?.nombres?.charAt(0) || '') + (currentUser?.postulante?.apellidos?.charAt(0) || '') | uppercase }}
     </div>
+    <div class="user-details">
+      <h6>
+        {{ currentUser?.postulante?.nombres }} {{ currentUser?.postulante?.apellidos }}
+      </h6>
+      <small>
+        {{ currentUser?.rol === 'POSTULANTE' ? 'Candidato' : currentUser?.rol }}
+      </small>
+      <p><strong>ID del Postulante:</strong> {{ currentUser?.postulante?.idPostulante }}</p>
+    </div>
+  </div>
+</div>
 
     <!-- Contenido del sidebar con scroll -->
     <div class="sidebar-content" style="overflow-y: auto; max-height: 90vh;">
@@ -40,11 +47,13 @@
     <div class="sidebar-footer">
       <ul class="sidebar-menu">
         <li *ngFor="let item of footerItems">
-          <a *ngIf="item.id !== 'cerrar-sesion'" [routerLink]="item.route" [class.active]="isActive(item.id)" (click)="setActiveMenuItem(item.id)">
+          <a *ngIf="item.id !== 'cerrar-sesion'" [routerLink]="item.route" [class.active]="isActive(item.id)"
+            (click)="setActiveMenuItem(item.id)">
             <i [class]="item.icon"></i>
             {{ item.label }}
           </a>
-          <a *ngIf="item.id === 'cerrar-sesion'" (click)="logout()" [class.active]="isActive(item.id)" style="cursor: pointer;">
+          <a *ngIf="item.id === 'cerrar-sesion'" (click)="logout()" [class.active]="isActive(item.id)"
+            style="cursor: pointer;">
             <i [class]="item.icon"></i>
             {{ item.label }}
           </a>
@@ -78,9 +87,9 @@
 
     <!-- Contenido de la página -->
     <div class="page-content">
-     <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </div>
     <!-- fin de contenido-->
-    
+
   </div>
 </div>

@@ -1,0 +1,33 @@
+.tag-actual {
+    background-color: #43a047;
+    color: white;
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 5px;
+  }
+  .icon-btn {
+    border: 1px solid #C6D4E1;
+    border-radius: 0.5rem;
+    padding: 6px 10px;
+  }
+  .icon-btn:hover {
+    background-color: #C6D4E1;
+  }
+  .experience-card {
+    border: 1px solid #C6D4E1;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+  .experience-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #44749D;
+  }
+  .experience-subtitle {
+    font-weight: 500;
+  }
+  .icon {
+    color: #44749D;
+    margin-right: 0.4rem;
+  }

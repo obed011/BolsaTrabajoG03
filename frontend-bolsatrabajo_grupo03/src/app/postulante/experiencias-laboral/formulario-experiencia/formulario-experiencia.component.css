@@ -1,0 +1,10 @@
+.form-container {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    border: 1px solid #C6D4E1;
+  }
+  label {
+    font-weight: 500;
+    color: #44749D;
+  }
