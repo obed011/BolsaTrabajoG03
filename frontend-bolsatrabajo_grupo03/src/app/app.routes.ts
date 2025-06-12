@@ -7,7 +7,7 @@ import { InicioComponent } from './pages/inicio/inicio.component';
 import { DashboardPostulanteComponent } from './postulante/dashboard-postulante/dashboard-postulante.component';
 import { PerfilComponent } from './postulante/perfil/perfil.component';
 import { ExperienciaLaboralComponent } from './postulante/experiencias-laboral/experiencia-laboral/experiencia-laboral.component';
-import { FormacionAcademicaComponent } from './postulante/formacion-academica/formacion-academica.component';
+import { FormacionAcademicaComponent } from './postulante/formaciones_academicas/formacion-academica/formacion-academica.component';
 import { HabilidadesComponent } from './postulante/habilidades/habilidades.component';
 import { AplicacionesComponent } from './postulante/aplicaciones/aplicaciones.component';
 import { HomePostulanteComponent } from './postulante/home-postulante/home-postulante.component';
@@ -23,6 +23,7 @@ import { AplicacionesOfertasComponent } from './empresa/aplicaciones-ofertas/apl
 import { authGuard } from './services/auth.guard';
 import { Pagina404Component } from './pages/pagina-404/pagina-404.component';
 import { FormularioExperienciaComponent } from './postulante/experiencias-laboral/formulario-experiencia/formulario-experiencia.component';
+import { FormularioFormacionComponent } from './postulante/formaciones_academicas/formulario-formacion/formulario-formacion.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'inicio', pathMatch: 'full' },
@@ -43,6 +44,8 @@ export const routes: Routes = [
             { path: 'experiencia-laboral/nuevo', component: FormularioExperienciaComponent, canActivate: [authGuard] },
             { path: 'experiencia-laboral/editar/:id', component: FormularioExperienciaComponent, canActivate: [authGuard] },
             { path: 'educacion', component: FormacionAcademicaComponent, canActivate: [authGuard] },
+            { path: 'educacion/nueva', component: FormularioFormacionComponent, canActivate: [authGuard] },
+            { path: 'educacion/editar/:id', component: FormularioFormacionComponent, canActivate: [authGuard] },
             { path: 'habilidades', component: HabilidadesComponent, canActivate: [authGuard] },
             { path: 'aplicaciones', component: AplicacionesComponent, canActivate: [authGuard] }
         ]

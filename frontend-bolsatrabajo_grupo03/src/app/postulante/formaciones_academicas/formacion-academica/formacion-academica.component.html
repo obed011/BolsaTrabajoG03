@@ -1,0 +1,98 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="text-primary">Formación Académica</h3>
+        <p class="text-muted m-0">Gestiona tu historial educativo</p>
+    </div>
+    <a class="btn btn-primary" [routerLink]="['./nueva']">
+        <i class="bi bi-plus-lg me-1"></i>Agregar Formación
+    </a>
+</div>
+
+<!-- Estado de carga -->
+<div *ngIf="loading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando formaciones...</p>
+</div>
+
+<!-- Estado de error -->
+<div *ngIf="error && !loading" class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+</div>
+
+<!-- Estado sin formaciones -->
+<div *ngIf="!loading && !error && formaciones.length === 0" class="text-center py-5">
+    <i class="bi bi-mortarboard display-1 text-muted"></i>
+    <h4 class="text-muted mt-3">No tienes formaciones académicas registradas</h4>
+    <p class="text-muted">Agrega tu primera formación académica para completar tu perfil</p>
+    <a class="btn btn-primary" [routerLink]="['./nuevo']">
+        <i class="bi bi-plus-lg me-1"></i>Agregar Primera Formación
+    </a>
+</div>
+
+<!-- Lista de formaciones -->
+<div *ngIf="!loading && !error && formaciones.length > 0">
+    <p class="text-muted mb-3">{{ formaciones.length }} formación(es) registrada(s)</p>
+
+    <div *ngFor="let form of formaciones" class="experience-card bg-white shadow-sm mb-4">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h5 class="experience-title d-flex align-items-center flex-wrap gap-2">
+                    <span><i class="bi bi-mortarboard icon"></i>{{ form.nombreEspecialidad }}</span>
+
+                    <span class="badge bg-info text-primary" *ngIf="form.nombreNivelAcademico">
+                        <i class="bi bi-award-fill me-1"></i>
+                        {{ form.nombreNivelAcademico }}
+                    </span>
+
+                    <span *ngIf="form.enCurso" class="tag-actual">
+                        En Curso
+                    </span>
+                </h5>
+                <p class="experience-subtitle text-secondary mb-1">
+                    <i class="bi bi-building icon"></i>{{ form.nombreInstitucion }}
+                </p>
+
+                <p class="text-muted mb-1">
+                    <i class="bi bi-calendar icon"></i>{{ form.inicioFormacion }} - {{ form.enCurso ? 'Presente' : form.finFormacion }}
+                </p>
+            </div>
+            <!-- Botones de acción -->
+            <div class="d-flex gap-1 align-items-center">
+                <button class="icon-btn text-primary border-primary" (click)="editar(form.idFormacion!)"
+                    title="Editar formación">
+                    <i class="bi bi-pencil"></i>
+                </button>
+
+                <button class="icon-btn text-danger border-danger" (click)="eliminar(form.idFormacion!)"
+                    title="Eliminar formación">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div *ngIf="showDeleteModal" class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar eliminación</h5>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar esta formación académica?</p>
+                <p class="text-muted small">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cerrarModal()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-danger text-white" (click)="confirmarEliminacion()">
+                    <i class="bi bi-trash me-1"></i>Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

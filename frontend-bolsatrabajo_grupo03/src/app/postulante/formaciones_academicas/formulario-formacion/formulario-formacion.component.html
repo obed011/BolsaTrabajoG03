@@ -1,0 +1,143 @@
+<h3 class="text-primary">{{ pageTitle }}</h3>
+<p class="text-muted">{{ pageSubtitle }}</p>
+
+<!-- Loading indicator para modo edición -->
+<div *ngIf="loading && isEditMode" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-muted">Cargando datos de la formación...</p>
+</div>
+
+<form class="form-container" [formGroup]="formacionForm" (ngSubmit)="onSubmit()" novalidate 
+      [style.display]="loading && isEditMode ? 'none' : 'block'">
+
+    <!-- Información básica -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label for="nombreInstitucion" class="form-label">
+                Institución Educativa <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="form-control" [class.is-invalid]="isFieldInvalid('nombreInstitucion')"
+                id="nombreInstitucion" formControlName="nombreInstitucion" 
+                placeholder="Nombre de la universidad, instituto o colegio">
+            <div class="invalid-feedback">
+                {{ getFieldError('nombreInstitucion') }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Nivel académico y especialidad -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="idNivelAcademico" class="form-label">
+                Nivel Académico <span class="text-danger">*</span>
+            </label>
+            <select class="form-select" [class.is-invalid]="isFieldInvalid('idNivelAcademico')" 
+                id="idNivelAcademico" formControlName="idNivelAcademico">
+                <option value="" disabled>Selecciona un nivel académico</option>
+                <option *ngFor="let nivel of nivelesAcademicos" [value]="nivel.idNivAcademico">
+                    {{ nivel.nomNivel }}
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                {{ getFieldError('idNivelAcademico') }}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label for="idEspecialidad" class="form-label">
+                Especialidad <span class="text-danger">*</span>
+            </label>
+            <select class="form-select" [class.is-invalid]="isFieldInvalid('idEspecialidad')" 
+                id="idEspecialidad" formControlName="idEspecialidad"
+                [disabled]="!formacionForm.get('idNivelAcademico')?.value || loadingEspecialidades">
+                <option value="" disabled>
+                    {{ loadingEspecialidades ? 'Cargando especialidades...' : 
+                       !formacionForm.get('idNivelAcademico')?.value ? 'Primero selecciona un nivel académico' : 
+                       'Selecciona una especialidad' }}
+                </option>
+                <option *ngFor="let especialidad of especialidades" [value]="especialidad.idEspecialidad">
+                    {{ especialidad.nomEsp }}
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                {{ getFieldError('idEspecialidad') }}
+            </div>
+            <div *ngIf="loadingEspecialidades" class="mt-1">
+                <small class="text-muted">
+                    <i class="fas fa-spinner fa-spin me-1"></i>Cargando especialidades...
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Años de estudio -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="inicioFormacion" class="form-label">
+                Año de Inicio <span class="text-danger">*</span>
+            </label>
+            <input type="number" class="form-control" [class.is-invalid]="isFieldInvalid('inicioFormacion')" 
+                id="inicioFormacion" formControlName="inicioFormacion" 
+                min="1950" [max]="maxYear" placeholder="Ej: 2020">
+            <div class="invalid-feedback">
+                {{ getFieldError('inicioFormacion') }}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label for="finFormacion" class="form-label">
+                Año de Finalización
+            </label>
+            <input type="number" class="form-control" [class.is-invalid]="isFieldInvalid('finFormacion')"
+                id="finFormacion" formControlName="finFormacion" 
+                min="1950" [max]="maxYear" placeholder="Ej: 2024"
+                [disabled]="formacionForm.get('enCurso')?.value">
+            <div class="invalid-feedback">
+                {{ getFieldError('finFormacion') }}
+            </div>
+            <small class="form-text text-muted" *ngIf="formacionForm.get('enCurso')?.value">
+                Desactiva "En curso" para establecer un año de finalización
+            </small>
+        </div>
+    </div>
+
+    <!-- En curso (solo si está permitido) -->
+    <div class="row mb-4" *ngIf="mostrarCheckboxEnCurso">
+        <div class="col-12">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="enCurso" formControlName="enCurso">
+                <label class="form-check-label" for="enCurso">
+                    <i class="fas fa-graduation-cap me-1"></i>
+                    Actualmente en curso
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje informativo si no se muestra el checkbox -->
+    <div class="row mb-4" *ngIf="!mostrarCheckboxEnCurso && !isEditMode">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                Ya tienes marcada otra formación como en curso. Solo puedes tener una formación en curso a la vez.
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="d-flex gap-2 justify-content-end">
+        <button type="button" class="btn btn-outline-secondary" (click)="onCancel()" [disabled]="loading">
+            <i class="fas fa-times me-1"></i>
+            Cancelar
+        </button>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading || formacionForm.invalid">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+            <i *ngIf="!loading" class="fas fa-save me-1"></i>
+            {{ submitButtonText }}
+        </button>
+    </div>
+
+</form>
