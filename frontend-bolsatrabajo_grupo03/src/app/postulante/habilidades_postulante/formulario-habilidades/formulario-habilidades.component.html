@@ -1,0 +1,120 @@
+<h3 class="text-primary">{{ pageTitle }}</h3>
+<p class="text-muted">{{ pageSubtitle }}</p>
+
+<!-- Loading indicator para modo edición -->
+<div *ngIf="loading && isEditMode" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-muted">Cargando datos de la habilidad...</p>
+</div>
+
+<form class="form-container" [formGroup]="habilidadForm" (ngSubmit)="onSubmit()" novalidate 
+      [style.display]="loading && isEditMode ? 'none' : 'block'">
+
+    <!-- Categoría de habilidad -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label for="idCategoriaHab" class="form-label">
+                Categoría de Habilidad <span class="text-danger">*</span>
+            </label>
+            <select class="form-select" [class.is-invalid]="isFieldInvalid('idCategoriaHab')" 
+                id="idCategoriaHab" formControlName="idCategoriaHab">
+                <option value="" disabled>Selecciona una categoría</option>
+                <option *ngFor="let categoria of categoriasHabilidades" [value]="categoria.idCategoriaHab">
+                    {{ categoria.nomCategoriaHab }}
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                {{ getFieldError('idCategoriaHab') }}
+            </div>
+            <small class="form-text text-muted">
+                Selecciona la categoría que mejor describa tu habilidad (ej: Programación, Diseño, Marketing)
+            </small>
+        </div>
+    </div>
+
+    <!-- Habilidad técnica específica -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label for="idHabilidadTecnica" class="form-label">
+                Habilidad Específica <span class="text-danger">*</span>
+            </label>
+            <select class="form-select" [class.is-invalid]="isFieldInvalid('idHabilidadTecnica')" 
+                id="idHabilidadTecnica" formControlName="idHabilidadTecnica"
+                [disabled]="!habilidadForm.get('idCategoriaHab')?.value || loadingHabilidades">
+                <option value="" disabled>
+                    {{ loadingHabilidades ? 'Cargando habilidades...' : 
+                       !habilidadForm.get('idCategoriaHab')?.value ? 'Primero selecciona una categoría' : 
+                       'Selecciona una habilidad específica' }}
+                </option>
+                <option *ngFor="let habilidad of habilidadesTecnicas" [value]="habilidad.idHabilidad">
+                    {{ habilidad.nomHabilidad }}
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                {{ getFieldError('idHabilidadTecnica') }}
+            </div>
+            <div *ngIf="loadingHabilidades" class="mt-1">
+                <small class="text-muted">
+                    <i class="fas fa-spinner fa-spin me-1"></i>Cargando habilidades específicas...
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nivel de dominio -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <label for="nivel" class="form-label">
+                Nivel de Dominio <span class="text-danger">*</span>
+            </label>
+            <select class="form-select" [class.is-invalid]="isFieldInvalid('nivel')" 
+                id="nivel" formControlName="nivel">
+                <option value="" disabled>Selecciona tu nivel de dominio</option>
+                <option *ngFor="let nivel of nivelesHabilidad" [value]="nivel.value">
+                    {{ nivel.label }}
+                </option>
+            </select>
+            <div class="invalid-feedback">
+                {{ getFieldError('nivel') }}
+            </div>
+            
+            <!-- Descripción de niveles -->
+            <div class="mt-2">
+                <small class="text-muted">
+                    <strong>Guía de niveles:</strong><br>
+                    <span class="d-block"><strong>Básico:</strong> Conocimientos introductorios, necesitas supervisión</span>
+                    <span class="d-block"><strong>Intermedio:</strong> Puedes trabajar de forma independiente en tareas comunes</span>
+                    <span class="d-block"><strong>Avanzado:</strong> Dominas la mayoría de aspectos, puedes resolver problemas complejos</span>
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vista previa de la habilidad seleccionada -->
+    <div class="row mb-4" *ngIf="selectedHabilidadName && habilidadForm.get('nivel')?.value">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-eye me-2"></i>
+                <strong>Vista previa:</strong> 
+                {{ selectedHabilidadName }} - Nivel {{ habilidadForm.get('nivel')?.value }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="d-flex gap-2 justify-content-end">
+        <button type="button" class="btn btn-outline-secondary" (click)="onCancel()" [disabled]="loading">
+            <i class="fas fa-times me-1"></i>
+            Cancelar
+        </button>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading || habilidadForm.invalid">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+            <i *ngIf="!loading" class="fas fa-save me-1"></i>
+            {{ submitButtonText }}
+        </button>
+    </div>
+
+</form>

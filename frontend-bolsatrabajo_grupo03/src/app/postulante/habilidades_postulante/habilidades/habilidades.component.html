@@ -1,0 +1,99 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="text-primary">Habilidades Técnicas</h3>
+        <p class="text-muted m-0">Gestiona tus competencias técnicas</p>
+    </div>
+    <a class="btn btn-primary" [routerLink]="['./nueva']">
+        <i class="bi bi-plus-lg me-1"></i>Agregar Habilidad
+    </a>
+</div>
+
+<!-- Estado de carga -->
+<div *ngIf="loading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando habilidades...</p>
+</div>
+
+<!-- Estado de error -->
+<div *ngIf="error && !loading" class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+</div>
+
+<!-- Estado sin habilidades -->
+<div *ngIf="!loading && !error && habilidades.length === 0" class="text-center py-5">
+    <i class="bi bi-code-slash display-1 text-muted"></i>
+    <h4 class="text-muted mt-3">No tienes habilidades técnicas registradas</h4>
+    <p class="text-muted">Agrega tu primera habilidad técnica para completar tu perfil</p>
+    <a class="btn btn-primary" [routerLink]="['./nueva']">
+        <i class="bi bi-plus-lg me-1"></i>Agregar Primera Habilidad
+    </a>
+</div>
+
+<!-- Lista de habilidades agrupadas por categoría -->
+<div *ngIf="!loading && !error && habilidades.length > 0">
+    <p class="text-muted mb-3">{{ getTotalHabilidades() }} habilidad(es) registrada(s)</p>
+
+    <!-- Iterar por cada categoría -->
+    <div *ngFor="let categoria of getCategoriasKeys()" class="card p-4 mb-4">
+        <!-- Encabezado de categoría -->
+        <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-diagram-3 text-primary me-2"></i>
+            <h5 class="text-primary mb-0">{{ categoria }}</h5>
+            <span class="badge bg-light text-dark ms-2">{{ habilidadesAgrupadas[categoria].length }}</span>
+        </div>
+
+        <!-- Habilidades de la categoría en filas de 3 -->
+        <div class="row g-3">
+            <div class="col-md-4" *ngFor="let habilidad of habilidadesAgrupadas[categoria]">
+                <div class="experience-card bg-info shadow-sm h-100">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h5 class="experience-title mb-4">
+                                <i class="bi bi-code-slash icon"></i> {{ habilidad.nomHabilidad }}
+                            </h5>
+                            <p class="mb-2">
+                                <span class="badge" [class]="getNivelClass(habilidad.nivel)">
+                                    {{ habilidad.nivel }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="icon-btn text-primary" (click)="editar(habilidad.idHabilidad!)" title="Editar">
+                              <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="icon-btn text-danger" (click)="eliminar(habilidad.idHabilidad!)" title="Eliminar">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </div>                          
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div *ngIf="showDeleteModal" class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar eliminación</h5>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar esta habilidad técnica?</p>
+                <p class="text-muted small">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cerrarModal()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-danger text-white" (click)="confirmarEliminacion()">
+                    <i class="bi bi-trash me-1"></i>Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+/* Estilos para las tarjetas de experiencia */
+.experience-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  transition: box-shadow 0.2s ease;
+  position: relative;
+}
+
+.experience-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.experience-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.experience-subtitle {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.icon {
+  font-size: 0.9rem;
+  margin-right: 6px;
+  opacity: 0.7;
+}
+
+/* Botones de acción */
+.icon-btn {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background-color: #C6D4E1 !important;
+  color: white !important;
+  transform: scale(1.05);
+}
+
+.icon-btn.text-primary {
+color: black !important;
+}
+
+.icon-btn.text-danger {
+  color: #dc3545 !important;
+}
+
+/* Badges de nivel */
+.badge {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+/* Estilos para diferentes niveles */
+.bg-warning.text-dark {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.bg-info.text-dark {
+  background-color: #17a2b8 !important;
+  color: #fff !important;
+}
+
+.bg-success.text-white {
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+
+.bg-secondary.text-white {
+  background-color: #6c757d !important;
+  color: #fff !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .experience-card {
+    padding: 15px;
+  }
+  
+  .experience-title {
+    font-size: 1rem;
+  }
+  
+  .d-flex.gap-1 {
+    gap: 0.25rem !important;
+  }
+  
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}
