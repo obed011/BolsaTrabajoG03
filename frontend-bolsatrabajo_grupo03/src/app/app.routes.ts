@@ -27,9 +27,8 @@ import { FormularioFormacionComponent } from './postulante/formaciones_academica
 import { FormularioHabilidadesComponent } from './postulante/habilidades_postulante/formulario-habilidades/formulario-habilidades.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'inicio', pathMatch: 'full' },
     { path: 'not-found', component: Pagina404Component },
-    { path: 'inicio', component: InicioComponent },
+    { path: '', component: InicioComponent },
     { path: 'login', component: LoginComponent },
     { path: 'registro-candidatos', component: RegistroPostulanteComponent },
     { path: 'registro-empresas', component: RegistroEmpresaComponent },
