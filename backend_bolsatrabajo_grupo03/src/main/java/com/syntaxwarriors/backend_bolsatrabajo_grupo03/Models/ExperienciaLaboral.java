@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDate;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "experiencia_laboral")
@@ -12,54 +11,54 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExperienciaLaboral {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_experiencia")
     private Integer idExperiencia;
 
-    @Column(name = "nom_organizacion", length = 50)
+    @Column(name = "nom_organizacion", length = 50, nullable = false)
     private String nomOrganizacion;
 
-    @Column(name = "nom_puesto", length = 75)
+    @Column(name = "nom_puesto", length = 75, nullable = false)
     private String nomPuesto;
 
-    @Column(name = "funciones", length = 200)
+    @Column(name = "funciones", length = 200, nullable = false)
     private String funciones;
 
-    @Column(name = "contacto_organizacion", length = 10)
+    @Column(name = "contacto_organizacion", length = 10, nullable = false)
     private String contactoOrganizacion;
 
-    @Column(name = "inicio_exp")
+    @Column(name = "inicio_exp", nullable = false)
     private LocalDate inicioExp;
 
     @Column(name = "fin_exp")
     private LocalDate finExp;
 
-    @Column(name = "trabajo_actual")
+    @Column(name = "trabajo_actual", nullable = false)
     private Boolean trabajoActual;
 
-    @Column(name = "fh_creacion")
-    private Timestamp fhCreacion;
+    @Column(name = "fyh_creacion_experiencia", nullable = false)
+    private LocalDate fhCreacion;
 
-    @Column(name = "fh_actualizacion", nullable = true)
-    private Timestamp fhActualizacion;
+    @Column(name = "fyh_actualizacion_experiencia")
+    private LocalDate fhActualizacion;
 
-    // Relación con CategoriaPuesto
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_puesto", referencedColumnName = "id_puesto")
+    @JoinColumn(name = "id_cat_puesto", nullable = false)
     private CategoriaPuesto categoriaPuesto;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_postulante", referencedColumnName = "id_postulante")
+    @JoinColumn(name = "id_postulante", nullable = false)
     private Postulante postulante;
 
     @PrePersist
     protected void onCreate() {
-        fhCreacion = new Timestamp(System.currentTimeMillis());
+        this.fhCreacion = LocalDate.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        fhActualizacion = new Timestamp(System.currentTimeMillis());
+        this.fhActualizacion = LocalDate.now();
     }
 }

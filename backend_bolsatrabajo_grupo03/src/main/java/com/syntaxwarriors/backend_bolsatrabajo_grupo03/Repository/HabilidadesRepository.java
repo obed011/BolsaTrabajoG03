@@ -20,6 +20,6 @@ public interface HabilidadesRepository extends JpaRepository<Habilidades, Intege
     @Query("SELECT COUNT(h) > 0 FROM Habilidades h WHERE h.postulante.idPostulante = :postulanteId AND h.habilidadTecnica.idHabilidad = :habilidadTecnicaId")
     boolean existsByPostulanteAndHabilidadTecnica(@Param("postulanteId") Integer postulanteId, @Param("habilidadTecnicaId") Integer habilidadTecnicaId);
 
-    @Query("SELECT COUNT(h) > 0 FROM Habilidades h WHERE h.postulante.idPostulante = :postulanteId AND h.habilidadTecnica.idHabilidad = :habilidadTecnicaId AND h.idHabilidad != :habilidadId")
+    @Query("SELECT COUNT(h) > 0 FROM Habilidades h WHERE h.postulante.idPostulante = :postulanteId AND h.habilidadTecnica.idHabilidad = :habilidadTecnicaId AND h.id != :habilidadId")
     boolean existsByPostulanteAndHabilidadTecnicaExcludingCurrent(@Param("postulanteId") Integer postulanteId, @Param("habilidadTecnicaId") Integer habilidadTecnicaId, @Param("habilidadId") Integer habilidadId);
 }

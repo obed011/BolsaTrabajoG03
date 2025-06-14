@@ -116,7 +116,7 @@ public class HabilidadesService {
 
     private HabilidadesDTO convertToDTO(Habilidades habilidad) {
         return new HabilidadesDTO(
-                habilidad.getIdHabilidad(),
+                habilidad.getId(),
                 habilidad.getPostulante().getIdPostulante(),
                 habilidad.getHabilidadTecnica().getIdHabilidad(),
                 habilidad.getHabilidadTecnica().getNomHabilidad(),

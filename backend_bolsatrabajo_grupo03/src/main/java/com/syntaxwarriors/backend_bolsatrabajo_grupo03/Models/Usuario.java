@@ -4,20 +4,22 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "tb_usuario")
+@Table(name = "usuario") // No es "tb_usuario", es "USUARIO"
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
     private Integer idUsuario;
 
-    @Column(name = "correo", length = 100, nullable = false, unique = true)
+    @Column(name = "correo", length = 50, nullable = false, unique = true)
     private String correo;
 
     @Column(name = "contrasena", nullable = false)
@@ -27,9 +29,22 @@ public class Usuario {
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
 
-    @Column(name = "estado", nullable = false)
+    @Column(name = "estado_user", nullable = false)
     private Boolean estado = true;
 
-    @Column(name = "fecha_creacion", nullable = false)
-    private LocalDateTime fechaCreacion = LocalDateTime.now();
+    @Column(name = "fyh_creacion_user", nullable = false)
+    private LocalDate fechaCreacion;
+
+    @Column(name = "intentos_login_fallidos")
+    private Integer intentosLoginFallidos;
+
+    @Column(name = "fyh_bloqueo")
+    private LocalDate fechaBloqueo;
+
+    @PrePersist
+    public void prePersist() {
+        this.fechaCreacion = LocalDate.now();
+        this.intentosLoginFallidos = 0; // Inicializar intentos de login fallidos a 0
+        this.fechaBloqueo = null; // Inicializar fecha de bloqueo a null
+    }
 }

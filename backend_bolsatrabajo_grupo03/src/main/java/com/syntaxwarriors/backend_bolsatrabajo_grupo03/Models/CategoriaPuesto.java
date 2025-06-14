@@ -11,9 +11,10 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoriaPuesto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_puesto")
+    @Column(name = "id_cat_puesto")
     private Integer idPuesto;
 
     @Column(name = "nombre_categoria", length = 100, nullable = false)

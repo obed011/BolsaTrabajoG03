@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "tb_categoria_habilidad")
+@Table(name = "categoria_habilidad")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,3 +20,5 @@ public class CategoriaHabilidad {
     @Column(name = "nom_categoria_hab", length = 50, nullable = false)
     private String nomCategoriaHab;
 }
+
+

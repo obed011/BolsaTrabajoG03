@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "tb_habilidades_tecnicas")
+@Table(name = "habilidades_tecnicas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,3 +24,4 @@ public class HabilidadTecnica {
     @Column(name = "nom_habilidad", length = 50, nullable = false)
     private String nomHabilidad;
 }
+

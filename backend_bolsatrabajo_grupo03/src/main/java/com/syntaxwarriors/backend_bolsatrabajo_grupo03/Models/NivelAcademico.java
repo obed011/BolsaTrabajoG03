@@ -7,11 +7,12 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_nivel_academico")
+@Table(name = "nivel_academico")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class NivelAcademico {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_niv_academico")

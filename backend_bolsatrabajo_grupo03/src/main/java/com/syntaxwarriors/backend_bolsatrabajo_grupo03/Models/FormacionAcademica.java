@@ -6,32 +6,33 @@ import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tb_formacion_academica")
+@Table(name = "formacion_academica")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class FormacionAcademica {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_formacion")
     private Integer idFormacion;
 
-    @Column(name = "nombre_institucion", length = 100, nullable = false)
+    @Column(name = "nombre_institucion_edu", length = 100, nullable = false)
     private String nombreInstitucion;
 
-    @Column(name = "inicio_formacion", nullable = false)
+    @Column(name = "inicio_formacion_edu", nullable = false)
     private Integer inicioFormacion;
 
-    @Column(name = "fin_formacion")
+    @Column(name = "fin_formacion_edu")
     private Integer finFormacion;
 
-    @Column(name = "en_curso", nullable = false)
+    @Column(name = "en_curso_edu", nullable = false)
     private Boolean enCurso;
 
-    @Column(name = "fyh_creacion", nullable = false)
+    @Column(name = "fyh_creacion_educacion", nullable = false)
     private LocalDate fyhCreacion;
 
-    @Column(name = "fyh_actualizacion")
+    @Column(name = "fyh_actualizacion_educacion")
     private LocalDate fyhActualizacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,3 +53,4 @@ public class FormacionAcademica {
         fyhActualizacion = LocalDate.now();
     }
 }
+

@@ -113,7 +113,7 @@ public class AuthService {
         postulante.setUsuario(usuario);
         postulante.setNombres(registerRequest.getNombres());
         postulante.setApellidos(registerRequest.getApellidos());
-        postulante.setTelefono(registerRequest.getTelefono());
+        postulante.setTelCelular(registerRequest.getTelefono());
         postulante.setFechaNacimiento(registerRequest.getFechaNacimiento());
         postulante.setDireccion(registerRequest.getDireccion());
         postulante.setGenero(registerRequest.getGenero());
@@ -182,7 +182,7 @@ public class AuthService {
         response.setIdPostulante(postulante.getIdPostulante());
         response.setNombres(postulante.getNombres());
         response.setApellidos(postulante.getApellidos());
-        response.setTelefono(postulante.getTelefono());
+        response.setTelefono(postulante.getTelCelular());
         response.setFechaNacimiento(postulante.getFechaNacimiento());
         response.setDireccion(postulante.getDireccion());
         response.setGenero(postulante.getGenero());
