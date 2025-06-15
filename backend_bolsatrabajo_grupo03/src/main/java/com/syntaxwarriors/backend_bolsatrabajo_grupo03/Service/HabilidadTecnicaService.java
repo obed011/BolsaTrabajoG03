@@ -28,6 +28,13 @@ public class HabilidadTecnicaService {
                 .collect(Collectors.toList());
     }
 
+    // Método para obtener una habilidad técnica por su ID
+    public HabilidadTecnicaDTO getHabilidadById(Integer id) {
+        HabilidadTecnica habilidad = habilidadTecnicaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Habilidad no encontrada con ID: " + id));
+        return convertToDTO(habilidad);
+    }
+
     private HabilidadTecnicaDTO convertToDTO(HabilidadTecnica habilidad) {
         return new HabilidadTecnicaDTO(
                 habilidad.getIdHabilidad(),

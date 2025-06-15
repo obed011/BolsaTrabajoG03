@@ -34,4 +34,19 @@ public class HabilidadTecnicaController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    //obtner habilidades tecnicas por id
+    @GetMapping("/{id}")
+    public ResponseEntity<HabilidadTecnicaDTO> getHabilidadById(@PathVariable Integer id) {
+        try {
+            HabilidadTecnicaDTO habilidad = habilidadTecnicaService.getHabilidadById(id);
+            if (habilidad != null) {
+                return ResponseEntity.ok(habilidad);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

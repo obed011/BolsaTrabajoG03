@@ -16,7 +16,7 @@ import { HomePostulanteComponent } from './postulante/home-postulante/home-postu
 import { DashboardEmpresaComponent } from './empresa/dashboard-empresa/dashboard-empresa.component';
 import { HomeEmpresaComponent } from './empresa/home-empresa/home-empresa.component';
 import { PerfilEmpresaComponent } from './empresa/perfil-empresa/perfil-empresa.component';
-import { OfertasComponent } from './empresa/ofertas/ofertas.component';
+import { OfertasComponent } from './empresa/mis-ofertas/ofertas/ofertas.component';
 import { CandidatosComponent } from './empresa/candidatos/candidatos.component';
 import { EntrevistasComponent } from './empresa/entrevistas/entrevistas.component';
 import { AplicacionesOfertasComponent } from './empresa/aplicaciones-ofertas/aplicaciones-ofertas.component';
@@ -25,6 +25,7 @@ import { Pagina404Component } from './pages/pagina-404/pagina-404.component';
 import { FormularioExperienciaComponent } from './postulante/experiencias-laboral/formulario-experiencia/formulario-experiencia.component';
 import { FormularioFormacionComponent } from './postulante/formaciones_academicas/formulario-formacion/formulario-formacion.component';
 import { FormularioHabilidadesComponent } from './postulante/habilidades_postulante/formulario-habilidades/formulario-habilidades.component';
+import { FormularioOfertasComponent } from './empresa/mis-ofertas/formulario-ofertas/formulario-ofertas.component';
 
 export const routes: Routes = [
     { path: 'not-found', component: Pagina404Component },
@@ -61,6 +62,8 @@ export const routes: Routes = [
             { path: 'home', component: HomeEmpresaComponent, canActivate: [authGuard] },
             { path: 'perfil', component: PerfilEmpresaComponent, canActivate: [authGuard] },
             { path: 'ofertas', component: OfertasComponent, canActivate: [authGuard] },
+            { path: 'ofertas/nueva', component: FormularioOfertasComponent, canActivate: [authGuard] },
+            { path: 'ofertas/editar/:id', component: FormularioOfertasComponent, canActivate: [authGuard] },
             { path: 'candidatos', component: CandidatosComponent, canActivate: [authGuard] },
             { path: 'entrevistas', component: EntrevistasComponent, canActivate: [authGuard] },
             { path: 'aplicaciones', component: AplicacionesOfertasComponent, canActivate: [authGuard] }

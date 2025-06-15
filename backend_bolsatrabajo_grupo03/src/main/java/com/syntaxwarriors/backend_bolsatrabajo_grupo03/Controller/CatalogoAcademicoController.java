@@ -32,4 +32,11 @@ public class CatalogoAcademicoController {
         List<EspecialidadAcademicaDTO> especialidades = catalogoService.obtenerEspecialidadesPorNivel(idNivelAcademico);
         return ResponseEntity.ok(especialidades);
     }
+
+    //Especialidades por id
+    @GetMapping("/especialidades/{idEspecialidad}")
+    public ResponseEntity<EspecialidadAcademicaDTO> obtenerEspecialidadPorId(@PathVariable Integer idEspecialidad) {
+        EspecialidadAcademicaDTO especialidad = catalogoService.obtenerEspecialidadPorId(idEspecialidad);
+        return ResponseEntity.ok(especialidad);
+    }
 }

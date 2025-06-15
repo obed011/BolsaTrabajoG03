@@ -1,0 +1,245 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="text-primary">Ofertas de Trabajo</h3>
+        <p class="text-muted m-0">Gestiona las ofertas de empleo de tu empresa</p>
+    </div>
+    <a class="btn btn-primary" [routerLink]="['./nueva']">
+        <i class="bi bi-plus-lg me-1"></i>Crear Oferta
+    </a>
+</div>
+
+<!-- Estado de carga -->
+<div *ngIf="loading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando ofertas...</p>
+</div>
+
+<!-- Estado de error -->
+<div *ngIf="error && !loading" class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+    <button class="btn btn-outline-danger btn-sm ms-2" (click)="cargarOfertas()">
+        <i class="bi bi-arrow-clockwise me-1"></i>Reintentar
+    </button>
+</div>
+
+<!-- Estado sin ofertas -->
+<div *ngIf="!loading && !error && ofertas.length === 0" class="text-center py-5">
+    <i class="bi bi-briefcase display-1 text-muted"></i>
+    <h4 class="text-muted mt-3">No tienes ofertas de trabajo publicadas</h4>
+    <p class="text-muted">Crea tu primera oferta de empleo para atraer talento</p>
+    <a class="btn btn-primary" [routerLink]="['./nueva']">
+        <i class="bi bi-plus-lg me-1"></i>Crear Primera Oferta
+    </a>
+</div>
+
+<!-- Lista de ofertas -->
+<div *ngIf="!loading && !error && ofertas.length > 0">
+    <p class="text-muted mb-3">{{ ofertas.length }} oferta(s) publicada(s)</p>
+
+    <div *ngFor="let oferta of ofertas" class="experience-card bg-white shadow-sm mb-4">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+                <h5 class="experience-title d-flex align-items-center flex-wrap gap-2 mb-2">
+                    <span><i class="bi bi-briefcase icon"></i>{{ oferta.tituloOferta }}</span>
+
+                    <span [class]="getEstadoOferta(oferta.fechaExpiracion).clase">
+                        {{ getEstadoOferta(oferta.fechaExpiracion).texto }}
+                    </span>
+                </h5>
+
+                <p class="experience-subtitle text-secondary mb-1">
+                    <i class="bi bi-tag icon"></i>{{ oferta.nombreCategoriaOferta }}
+                </p>
+
+                <div class="d-flex flex-wrap gap-3 text-muted small mb-2">
+                    <span>
+                        <i class="bi bi-geo-alt icon"></i>{{ oferta.ubicacion }}
+                    </span>
+                    <span [class]="getModalidadClase(oferta.modalidad)">
+                        <i class="bi bi-laptop me-1"></i>{{ oferta.modalidad }}
+                    </span>
+                    <span class="text-success fw-semibold">
+                        <i class="bi bi-currency-dollar icon"></i>{{ formatearSalario(oferta.salario) }}
+                    </span>
+                </div>
+
+                <div class="d-flex flex-wrap gap-3 text-muted small">
+                    <span>
+                        <i class="bi bi-calendar-plus icon"></i>
+                        Publicada: {{ formatearFecha(oferta.fechaPublicacion!) }}
+                    </span>
+                    <span>
+                        <i class="bi bi-calendar-x icon"></i>
+                        Expira: {{ formatearFecha(oferta.fechaExpiracion) }}
+                    </span>
+                </div>
+
+                <!-- Descripción corta -->
+                <p class="text-muted mt-2 mb-0" *ngIf="oferta.descripcionOferta">
+                    {{ oferta.descripcionOferta.length > 150 ?
+                    (oferta.descripcionOferta | slice:0:150) + '...' :
+                    oferta.descripcionOferta }}
+                </p>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="d-flex gap-1 align-items-center ms-3">
+                <button class="icon-btn text-info border-info" (click)="verDetalle(oferta)" title="Ver detalles">
+                    <i class="bi bi-eye"></i>
+                </button>
+
+                <button class="icon-btn text-primary border-primary" [routerLink]="['./editar', oferta.idOferta]"
+                    title="Editar oferta">
+                    <i class="bi bi-pencil"></i>
+                </button>
+
+                <button class="icon-btn text-danger border-danger" (click)="eliminar(oferta.idOferta!)"
+                    title="Eliminar oferta">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de detalle -->
+<div *ngIf="showDetailModal && ofertaDetalle" class="modal d-block" tabindex="-1"
+    style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-briefcase me-2"></i>{{ ofertaDetalle.tituloOferta }}
+                </h5>
+                <button type="button" class="btn-close" (click)="cerrarModalDetalle()"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Información básica -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-primary mb-2">Información General</h6>
+                        <p class="mb-1">
+                            <strong>Categoría:</strong> {{ ofertaDetalle.nombreCategoriaOferta }}
+                        </p>
+                        <p class="mb-1">
+                            <strong>Ubicación:</strong> {{ ofertaDetalle.ubicacion }}
+                        </p>
+                        <p class="mb-1">
+                            <strong>Modalidad:</strong>
+                            <span [class]="getModalidadClase(ofertaDetalle.modalidad)" class="ms-1">
+                                {{ ofertaDetalle.modalidad }}
+                            </span>
+                        </p>
+                        <p class="mb-1">
+                            <strong>Salario:</strong>
+                            <span class="text-success fw-semibold">{{ formatearSalario(ofertaDetalle.salario) }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-primary mb-2">Fechas</h6>
+                        <p class="mb-1">
+                            <strong>Publicada:</strong> {{ formatearFecha(ofertaDetalle.fechaPublicacion!) }}
+                        </p>
+                        <p class="mb-1">
+                            <strong>Expira:</strong> {{ formatearFecha(ofertaDetalle.fechaExpiracion) }}
+                        </p>
+                        <p class="mb-1">
+                            <strong>Estado:</strong>
+                            <span [class]="getEstadoOferta(ofertaDetalle.fechaExpiracion).clase" class="ms-1">
+                                {{ getEstadoOferta(ofertaDetalle.fechaExpiracion).texto }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="mb-3">
+                    <h6 class="text-primary mb-2">Descripción del Puesto</h6>
+                    <p class="text-muted" style="white-space: pre-wrap;">{{ ofertaDetalle.descripcionOferta }}</p>
+                </div>
+
+                <!-- Requerimientos de experiencia -->
+                <div class="mb-3"
+                    *ngIf="ofertaDetalle.requerimientosExperiencia && ofertaDetalle.requerimientosExperiencia.length > 0">
+                    <h6 class="text-primary mb-2">Experiencia Requerida</h6>
+                    <div class="row">
+                        <div class="col-md-12" *ngFor="let req of ofertaDetalle.requerimientosExperiencia">
+                            <div class="border rounded p-2 mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="fw-semibold">{{ req.puestoRq }}</span>
+                                        <small class="text-muted d-block">{{ req.nombreCategoria }}</small>
+                                    </div>
+                                    <span class="badge bg-secondary">
+                                        {{ req.anosExp }} año{{ req.anosExp === 1 ? '' : 's' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Habilidades requeridas -->
+                <div class="mb-3"
+                    *ngIf="ofertaDetalle.habilidadesNombres && ofertaDetalle.habilidadesNombres.length > 0">
+                    <h6 class="text-primary mb-2">Habilidades Requeridas</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-info" *ngFor="let habilidad of ofertaDetalle.habilidadesNombres">
+                            {{ habilidad.nomHabilidad }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Especialidades requeridas -->
+                <div class="mb-3"
+                    *ngIf="ofertaDetalle.especialidadesNombres && ofertaDetalle.especialidadesNombres.length > 0">
+                    <h6 class="text-primary mb-2">Especialidades Académicas Requeridas</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-success" *ngFor="let especialidad of ofertaDetalle.especialidadesNombres">
+                            {{ especialidad.nomEsp }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cerrarModalDetalle()">
+                    Cerrar
+                </button>
+                <button type="button" class="btn btn-primary" [routerLink]="['./editar', ofertaDetalle.idOferta]"
+                    (click)="cerrarModalDetalle()">
+                    <i class="bi bi-pencil me-1"></i>Editar Oferta
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div *ngIf="showDeleteModal" class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar eliminación</h5>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar esta oferta de trabajo?</p>
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Advertencia:</strong> Esta acción eliminará permanentemente la oferta y todas las
+                    postulaciones asociadas.
+                </div>
+                <p class="text-muted small">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cerrarModalEliminar()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-danger text-white" (click)="confirmarEliminacion()">
+                    <i class="bi bi-trash me-1"></i>Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

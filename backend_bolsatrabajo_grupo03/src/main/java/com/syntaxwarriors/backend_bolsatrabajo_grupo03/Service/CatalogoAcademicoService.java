@@ -42,4 +42,14 @@ public class CatalogoAcademicoService {
                         especialidad.getNivelAcademico().getIdNivAcademico()))
                 .collect(Collectors.toList());
     }
+
+    //Obtener especialidades por id
+    public EspecialidadAcademicaDTO obtenerEspecialidadPorId(Integer idEspecialidad) {
+        EspecialidadAcademica especialidad = especialidadAcademicaRepository.findById(idEspecialidad)
+                .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
+        return new EspecialidadAcademicaDTO(
+                especialidad.getIdEspecialidad(),
+                especialidad.getNomEsp(),
+                especialidad.getNivelAcademico().getIdNivAcademico());
+    }
 }
