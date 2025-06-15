@@ -85,7 +85,7 @@ public class AuthService {
             }
         }
 
-        return new AuthResponse(jwt, usuario.getCorreo(), usuario.getRol().getNombreRol(), postulanteResponse, empresaResponse);
+        return new AuthResponse(jwt, usuario.getIdUsuario(), usuario.getCorreo(), usuario.getRol().getNombreRol(), postulanteResponse, empresaResponse);
     }
 
     @Transactional
@@ -126,7 +126,7 @@ public class AuthService {
 
         PostulanteResponse postulanteResponse = mapToPostulanteResponse(postulante);
 
-        return new AuthResponse(jwt, usuario.getCorreo(), usuario.getRol().getNombreRol(), postulanteResponse);
+        return new AuthResponse(jwt, usuario.getIdUsuario(), usuario.getCorreo(), usuario.getRol().getNombreRol(), postulanteResponse);
     }
     @Transactional
     public AuthResponse registerEmpresa(RegisterEmpresaRequest registerRequest) {
@@ -174,7 +174,7 @@ public class AuthService {
 
         EmpresaResponse empresaResponse = mapToEmpresaResponse(empresa);
 
-        return new AuthResponse(jwt, usuario.getCorreo(), usuario.getRol().getNombreRol(), empresaResponse);
+        return new AuthResponse(jwt, usuario.getIdUsuario(), usuario.getCorreo(), usuario.getRol().getNombreRol(), empresaResponse);
     }
 
     private PostulanteResponse mapToPostulanteResponse(Postulante postulante) {

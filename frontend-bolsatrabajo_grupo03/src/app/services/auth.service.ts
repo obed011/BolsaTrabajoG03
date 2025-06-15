@@ -56,6 +56,7 @@ export interface EmpresaResponse {
 export interface AuthResponse {
   token: string;
   tipo: string;
+  idUsuario: number;
   correo: string;
   rol: string;
   postulante?: PostulanteResponse;
