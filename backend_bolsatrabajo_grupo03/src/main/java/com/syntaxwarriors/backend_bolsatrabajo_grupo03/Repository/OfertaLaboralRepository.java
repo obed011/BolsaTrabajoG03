@@ -15,4 +15,13 @@ public interface OfertaLaboralRepository extends JpaRepository<OfertaLaboral, In
 
     @Query("SELECT o FROM OfertaLaboral o WHERE o.empresa.idEmpresa = :empresaId AND o.idOferta = :ofertaId")
     OfertaLaboral findByEmpresaIdAndOfertaId(@Param("empresaId") Integer empresaId, @Param("ofertaId") Integer ofertaId);
+
+    @Query("SELECT o FROM OfertaLaboral o WHERE o.fechaExpiracion >= CURRENT_DATE ORDER BY o.fechaPublicacion DESC")
+    List<OfertaLaboral> findActiveOfertasOrderByFechaPublicacionDesc();
+
+    @Query("SELECT o FROM OfertaLaboral o WHERE o.categoriaOferta.idCatOferta = :categoriaId AND o.fechaExpiracion >= CURRENT_DATE ORDER BY o.fechaPublicacion DESC")
+    List<OfertaLaboral> findActiveByCategoriaIdOrderByFechaPublicacionDesc(@Param("categoriaId") Integer categoriaId);
+
+    @Query("SELECT o FROM OfertaLaboral o WHERE o.idOferta = :ofertaId AND o.fechaExpiracion >= CURRENT_DATE")
+    OfertaLaboral findActiveOfertaById(@Param("ofertaId") Integer ofertaId);
 }

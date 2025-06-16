@@ -1,0 +1,201 @@
+<app-header></app-header>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary mb-0">
+          <i class="bi bi-briefcase-fill me-2"></i>
+          Ofertas de Trabajo
+        </h2>
+        <span class="badge bg-info text-primary fs-6">
+          <i class="bi bi-megaphone-fill me-1"></i>
+          {{ ofertasFiltradas.length }} ofertas disponibles
+        </span>
+      </div>
+
+      <!-- Filtros -->
+      <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="busqueda" class="form-label fw-semibold">
+                <i class="bi bi-search me-1"></i>
+                Buscar ofertas
+              </label>
+              <input
+                type="text"
+                id="busqueda"
+                class="form-control"
+                placeholder="Título, empresa, ubicación..."
+                [(ngModel)]="terminoBusqueda"
+                (input)="onBusquedaChange()">
+            </div>
+            <div class="col-md-4">
+              <label for="categoria" class="form-label fw-semibold">
+                <i class="bi bi-tags-fill me-1"></i>
+                Categoría
+              </label>
+              <select
+                id="categoria"
+                class="form-select"
+                [(ngModel)]="categoriaSeleccionada"
+                (change)="onCategoriaChange()">
+                <option value="0">Todas las categorías</option>
+                <option *ngFor="let categoria of categorias" [value]="categoria.idCatOferta">
+                  {{ categoria.nomCatOferta }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button
+                type="button"
+                class="btn btn-outline-secondary w-100"
+                (click)="limpiarFiltros()">
+                <i class="bi bi-x-circle-fill me-1"></i>
+                Limpiar filtros
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3 text-muted">Cargando ofertas...</p>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ error }}
+      </div>
+
+      <!-- Lista de ofertas -->
+      <div *ngIf="!loading && !error">
+        <div *ngIf="ofertasFiltradas.length === 0" class="text-center py-5">
+          <i class="bi bi-search fs-1 text-muted mb-3"></i>
+          <h4 class="text-muted">No se encontraron ofertas</h4>
+          <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
+        </div>
+
+        <div class="row" *ngIf="ofertasFiltradas.length > 0">
+          <div class="col-lg-6 col-xl-4 mb-4" *ngFor="let oferta of ofertasFiltradas">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+              <div class="card-header bg-primary text-white border-0">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h5 class="card-title mb-1 text-truncate">{{ oferta.tituloOferta }}</h5>
+                  <span class="badge bg-light text-primary ms-2">
+                    {{ formatearSalario(oferta.salario) }}
+                  </span>
+                </div>
+                <small class="opacity-75">
+                  <i class="bi bi-building-fill me-1"></i>
+                  {{ oferta.nombreEmpresa }}
+                </small>
+              </div>
+
+              <div class="card-body">
+                <div class="mb-3">
+                  <span class="badge bg-primary me-2">{{ oferta.nombreCategoriaOferta }}</span>
+                  <span class="badge text-primary" [ngClass]="obtenerColorModalidad(oferta.modalidad)">
+                    <i class="bi bi-house-door-fill me-1"></i>
+                    {{ oferta.modalidad }}
+                  </span>
+                </div>
+
+                <p class="card-text text-muted small mb-3" [title]="oferta.descripcionOferta">
+                  {{ oferta.descripcionOferta.length > 100 ? 
+                     (oferta.descripcionOferta.substring(0, 100) + '...') : 
+                     oferta.descripcionOferta }}
+                </p>
+
+                <div class="mb-3">
+                  <div class="d-flex align-items-center mb-2">
+                    <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                    <span class="small">{{ oferta.ubicacion }}</span>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-calendar-event-fill text-info me-2"></i>
+                    <span class="small">
+                      Expira en {{ calcularDiasRestantes(oferta.fechaExpiracion) }} días
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Experiencia requerida -->
+                <div *ngIf="oferta.requerimientosExperiencia.length > 0" class="mb-3">
+                  <h6 class="fw-semibold text-primary mb-2">
+                    <i class="bi bi-briefcase-fill me-1"></i>
+                    Experiencia:
+                  </h6>
+                  <div class="d-flex flex-wrap gap-1">
+                    <span
+                      *ngFor="let req of oferta.requerimientosExperiencia"
+                      class="badge bg-light text-dark">
+                      {{ req.puestoRq }} ({{ req.anosExp }} años)
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Habilidades -->
+                <div *ngIf="oferta.habilidadesNombres && oferta.habilidadesNombres.length > 0" class="mb-3">
+                  <h6 class="fw-semibold text-primary mb-2">
+                    <i class="bi bi-tools me-1"></i>
+                    Habilidades:
+                  </h6>
+                  <div class="d-flex flex-wrap gap-1">
+                    <span
+                      *ngFor="let habilidad of oferta.habilidadesNombres.slice(0, 3)"
+                      class="badge bg-info text-primary">
+                      {{ habilidad.nomHabilidad }}
+                    </span>
+                    <span
+                      *ngIf="oferta.habilidadesNombres.length > 3"
+                      class="badge bg-secondary">
+                      +{{ oferta.habilidadesNombres.length - 3 }} más
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Especialidades -->
+                <div *ngIf="oferta.especialidadesNombres && oferta.especialidadesNombres.length > 0" class="mb-3">
+                  <h6 class="fw-semibold text-primary mb-2">
+                    <i class="bi bi-mortarboard-fill me-1"></i>
+                    Especialidades:
+                  </h6>
+                  <div class="d-flex flex-wrap gap-1">
+                    <span
+                      *ngFor="let especialidad of oferta.especialidadesNombres.slice(0, 2)"
+                      class="badge bg-warning text-dark">
+                      {{ especialidad.nomEsp }}
+                    </span>
+                    <span
+                      *ngIf="oferta.especialidadesNombres.length > 2"
+                      class="badge bg-secondary">
+                      +{{ oferta.especialidadesNombres.length - 2 }} más
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer bg-transparent border-0 pt-0">
+                <button
+                  type="button"
+                  class="btn btn-primary w-100"
+                  (click)="verDetalle(oferta.idOferta!)">
+                  <i class="bi bi-eye-fill me-2"></i>
+                  Ver detalles y aplicar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

@@ -26,11 +26,15 @@ import { FormularioExperienciaComponent } from './postulante/experiencias-labora
 import { FormularioFormacionComponent } from './postulante/formaciones_academicas/formulario-formacion/formulario-formacion.component';
 import { FormularioHabilidadesComponent } from './postulante/habilidades_postulante/formulario-habilidades/formulario-habilidades.component';
 import { FormularioOfertasComponent } from './empresa/mis-ofertas/formulario-ofertas/formulario-ofertas.component';
+import { EmpleosComponent } from './pages/oferta-empleo/empleos/empleos.component';
+import { DetalleEmpleoComponent } from './pages/oferta-empleo/detalle-empleo/detalle-empleo.component';
 
 export const routes: Routes = [
     { path: 'not-found', component: Pagina404Component },
     { path: '', component: InicioComponent },
     { path: 'inicio', redirectTo: '', pathMatch: 'full' },
+    { path: 'empleos', component: EmpleosComponent },
+    { path: 'ofertas/:id', component: DetalleEmpleoComponent },
     { path: 'login', component: LoginComponent },
     { path: 'registro-candidatos', component: RegistroPostulanteComponent },
     { path: 'registro-empresas', component: RegistroEmpresaComponent },
@@ -39,8 +43,7 @@ export const routes: Routes = [
         component: DashboardPostulanteComponent,
         canActivate: [authGuard],
         children: [
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomePostulanteComponent, canActivate: [authGuard] },
+            { path: '', redirectTo: 'perfil', pathMatch: 'full' },
             { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
             { path: 'experiencia-laboral', component: ExperienciaLaboralComponent, canActivate: [authGuard] },
             { path: 'experiencia-laboral/nuevo', component: FormularioExperienciaComponent, canActivate: [authGuard] },

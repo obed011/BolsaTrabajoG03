@@ -210,7 +210,7 @@ export class DashboardPostulanteComponent implements OnInit {
   activeMenuItem = 'resumen'; // Elemento activo por defecto
 
   menuItems = [
-    { id: 'resumen', icon: 'bi bi-file-text', label: 'Resumen', route: '/postulante/home' },
+    // { id: 'resumen', icon: 'bi bi-file-text', label: 'Resumen', route: '/postulante/home' },
     { id: 'datos-personales', icon: 'bi bi-person', label: 'Datos Personales', route: '/postulante/perfil' },
     { id: 'experiencia', icon: 'bi bi-briefcase', label: 'Experiencia Laboral', route: '/postulante/experiencia-laboral' },
     { id: 'educacion', icon: 'bi bi-mortarboard', label: 'Educación', route: '/postulante/educacion' },
@@ -280,4 +280,15 @@ export class DashboardPostulanteComponent implements OnInit {
     }
     return '';
   }
+  getIniciales(): string {
+    if (!this.curriculum?.nombre_completo) return '';
+  
+    const nombres = this.curriculum.nombre_completo.split(' ');
+  
+    const inicial1 = nombres[0]?.charAt(0) || '';
+    const inicial2 = nombres[1]?.charAt(0) || '';
+  
+    return `${inicial1}${inicial2}`.toUpperCase();
+  }
+  
 }

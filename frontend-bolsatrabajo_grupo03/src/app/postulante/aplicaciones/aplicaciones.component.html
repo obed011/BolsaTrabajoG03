@@ -1,1 +1,116 @@
-<p>aplicaciones works!</p>
+<div class="container my-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="text-primary">Mis Aplicaciones</h3>
+            <p class="text-muted m-0">Observa el estado de tus aplicaciones a ofertas de empleo</p>
+        </div>
+      <button class="btn btn-primary" (click)="irAOfertas()">
+        <i class="bi bi-plus-circle"></i> Buscar más empleos
+      </button>
+    </div>
+
+    <!-- Resumen -->
+    <div class="row mt-5 mb-5">
+        <div class="col-md-12">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h6 class="card-title">Resumen de aplicaciones</h6>
+              <div class="row text-center">
+                <div class="col">
+                  <h4 class="text-primary">
+                    <i class="bi bi-briefcase-fill me-2"></i> {{ aplicaciones.length }}
+                  </h4>
+                  <small class="text-muted">Total</small>
+                </div>
+                <div class="col" *ngFor="let estado of getEstadosUnicos()">
+                  <h4 [class]="obtenerColorEstado(estado).includes('bg-success') ? 'text-success' : 
+                              obtenerColorEstado(estado).includes('bg-danger') ? 'text-danger' : 
+                              obtenerColorEstado(estado).includes('bg-warning') ? 'text-warning' : 'text-info'">
+                    <i [class]="obtenerColorEstado(estado).includes('bg-success') ? 'bi bi-check-circle-fill me-2' : 
+                                obtenerColorEstado(estado).includes('bg-danger') ? 'bi bi-x-circle-fill me-2' : 
+                                obtenerColorEstado(estado).includes('bg-warning') ? 'bi bi-exclamation-circle-fill me-2' : 'bi bi-info-circle-fill me-2'"></i>
+                    {{ contarPorEstado(estado) }}
+                  </h4>
+                  <small class="text-muted">{{ estado | titlecase }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    <!-- Filtro y búsqueda -->
+    <div class="d-flex justify-content-between align-items-center mb-4 experience-card">
+      <input 
+        type="text" 
+        class="form-control w-50" 
+        placeholder="Buscar por empresa o puesto..."
+        [(ngModel)]="busqueda"
+        (input)="filtrarAplicaciones()">
+      <select 
+        class="form-select w-auto ms-3"
+        [(ngModel)]="estadoFiltro"
+        (change)="filtrarAplicaciones()">
+        <option value="">Todos los estados</option>
+        <option *ngFor="let estado of getEstadosUnicos()" [value]="estado">
+          {{ estado | titlecase }}
+        </option>
+      </select>
+    </div>
+  
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando tus aplicaciones...</p>
+    </div>
+  
+    <!-- Error -->
+    <div *ngIf="error" class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle"></i>
+      {{ error }}
+      <button class="btn btn-outline-danger btn-sm ms-2" (click)="cargarMisAplicaciones()">
+        Reintentar
+      </button>
+    </div>
+  
+    <!-- Sin aplicaciones -->
+    <div *ngIf="!loading && !error && aplicacionesFiltradas.length === 0" class="text-center py-5">
+      <i class="bi bi-inbox display-1 text-muted"></i>
+      <h4 class="mt-3">No tienes aplicaciones</h4>
+      <p class="text-muted">Aún no has aplicado a ninguna oferta de trabajo.</p>
+      <button class="btn btn-primary" (click)="irAOfertas()">
+        <i class="bi bi-search"></i> Explorar empleos
+      </button>
+    </div>
+  
+    <!-- Lista de aplicaciones -->
+    <div *ngIf="!loading && !error && aplicacionesFiltradas.length > 0">
+      <div class="experience-card mb-4" *ngFor="let aplicacion of aplicacionesFiltradas">
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5 class="experience-title mb-1">
+              {{ aplicacion.tituloOferta }}
+              <span class="tag-actual" [class]="obtenerColorEstado(aplicacion.estadoAplicacion)">
+                {{ aplicacion.estadoAplicacion | titlecase }}	
+              </span>
+            </h5>
+            <p class="experience-subtitle text-muted mb-0">{{ aplicacion.nombreEmpresa }}</p>
+          </div>
+        </div>
+  
+        <div class="text-muted mt-3">
+          <i class="bi bi-person icon"></i> {{ aplicacion.nombrePostulante }}
+          &nbsp;&nbsp;<i class="bi bi-calendar icon"></i> Aplicado: {{ formatearFecha(aplicacion.fechaAplicacion) }}
+        </div>
+  
+        <div class="mt-3">
+          <p class="mb-0 text-primary">
+            {{ obtenerMensajeProgreso(aplicacion.estadoAplicacion) }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
