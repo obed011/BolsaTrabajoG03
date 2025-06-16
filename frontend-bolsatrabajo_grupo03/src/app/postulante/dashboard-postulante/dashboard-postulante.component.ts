@@ -2,7 +2,41 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService, AuthResponse } from '../../services/auth.service';
+import { CurriculumService } from '../../services/curriculum.service';
 import Swal from 'sweetalert2';
+
+// Interface para el curriculum
+interface FormacionAcademica {
+  institucion: string;
+  especialidad: string;
+  nivel: string;
+  inicio: number;
+  fin: number;
+}
+
+interface ExperienciaLaboral {
+  organizacion: string;
+  puesto: string;
+  funciones: string;
+  inicio: string;
+  fin: string | null;
+}
+
+interface Habilidad {
+  habilidad: string;
+  nivel: string;
+}
+
+interface CurriculumResponse {
+  id_postulante: number;
+  nombre_completo: string;
+  genero: string;
+  telefono: string;
+  direccion: string;
+  formacion_academica: FormacionAcademica[];
+  experiencia_laboral: ExperienciaLaboral[];
+  habilidades: Habilidad[];
+}
 
 @Component({
   selector: 'app-dashboard-postulante',
@@ -16,9 +50,12 @@ import Swal from 'sweetalert2';
 export class DashboardPostulanteComponent implements OnInit {
   currentUser: AuthResponse | null = null;
   loading = false;
+  curriculum: CurriculumResponse | null = null;
+  loadingCurriculum = false;
 
   constructor(
     private authService: AuthService,
+    private curriculumService: CurriculumService,
     private router: Router
   ) {}
 
@@ -65,6 +102,58 @@ export class DashboardPostulanteComponent implements OnInit {
         // Marcar que ya se mostró la alerta
         this.authService.markWelcomeAlertShown();
       }, 300);
+    }
+  }
+
+  // Método para cargar el currículum
+  loadCurriculum(): void {
+    if (!this.currentUser?.postulante?.idPostulante) {
+      console.error('No se encontró el ID del postulante');
+      return;
+    }
+
+    this.loadingCurriculum = true;
+    this.curriculumService.getCurriculumByPostulanteId(this.currentUser.postulante.idPostulante).subscribe({
+      next: (response: any) => {
+        this.curriculum = response;
+        console.log('Currículum cargado:', response);
+      },
+      error: (error) => {
+        console.error('Error al cargar el currículum:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo cargar el currículum. Intente nuevamente.',
+          icon: 'error',
+          confirmButtonText: 'Entendido'
+        });
+      },
+      complete: () => {
+        this.loadingCurriculum = false;
+      }
+    });
+  }
+
+  // Método para formatear fechas
+  formatDate(dateString: string | null): string {
+    if (!dateString) return 'Actualidad';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', { 
+      year: 'numeric', 
+      month: 'long' 
+    });
+  }
+
+  // Método para obtener el color del nivel de habilidad
+  getSkillLevelClass(nivel: string): string {
+    switch (nivel.toLowerCase()) {
+      case 'básico':
+        return 'bg-danger';
+      case 'intermedio':
+        return 'bg-warning';
+      case 'avanzado':
+        return 'bg-success';
+      default:
+        return 'bg-secondary';
     }
   }
 
@@ -170,5 +259,25 @@ export class DashboardPostulanteComponent implements OnInit {
 
   isActive(itemId: string): boolean {
     return this.activeMenuItem === itemId;
+  }
+  
+  getCurrentDateTime(): string {
+    return new Date().toLocaleString('es-ES', {
+      day: '2-digit',
+      month: '2-digit', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+  
+  getShortName(): string {
+    const user = this.currentUser;
+    if (user?.postulante) {
+      const firstName = user.postulante.nombres?.split(' ')[0] || '';
+      const lastName = user.postulante.apellidos?.split(' ')[0] || '';
+      return `${firstName} ${lastName}`.trim();
+    }
+    return '';
   }
 }

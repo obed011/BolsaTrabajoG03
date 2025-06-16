@@ -1,50 +1,85 @@
 <header class="border-bottom shadow-sm">
-    <nav class="navbar navbar-expand-lg bg-white">
-      <div class="container-fluid">
-  
-        <!-- Logo + nombre -->
-        <a class="navbar-brand d-flex align-items-center gap-2 text-primary fw-bold" routerLink="/">
-          <i class="bi bi-briefcase-fill fs-4"></i> Bolsa de Trabajo
-        </a>
-  
-        <!-- Botón hamburguesa en pantallas pequeñas -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-          aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-  
-        <!-- Enlaces de navegación -->
-        <div class="collapse navbar-collapse" id="navbarContent">
-          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3">
-            <li class="nav-item">
-              <a class="nav-link text-primary" routerLink="/inicio">Empleos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-primary" routerLink="/empresas">Empresas</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-primary" routerLink="/candidatos">Candidatos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-primary" routerLink="/recursos">Recursos</a>
-            </li>
-          </ul>
-  
-          <!-- Botones a la derecha -->
-          <div class="d-flex gap-2">
+  <nav class="navbar navbar-expand-lg bg-white">
+    <div class="container-fluid">
+
+      <!-- Logo + nombre -->
+      <a class="navbar-brand d-flex align-items-center gap-2 text-primary fw-bold" routerLink="/">
+        <i class="bi bi-briefcase-fill fs-4"></i> Bolsa de Trabajo
+      </a>
+
+      <!-- Botón hamburguesa en pantallas pequeñas -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Enlaces de navegación -->
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3">
+          <li class="nav-item">
+            <a class="nav-link text-primary" routerLink="/inicio">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" routerLink="/empleos">Empleos</a>
+          </li>
+        </ul>
+
+        <!-- Botones/información de usuario a la derecha -->
+        <div class="d-flex gap-2 align-items-center">
+          <!-- Mostrar cuando NO está autenticado -->
+          <ng-container *ngIf="!isAuthenticated()">
             <div class="dropdown">
-                <a class="nav-link dropdown-toggle text-primary mt-1" href="#" id="registerDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Registrarse
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="registerDropdown">
-                    <li><a class="dropdown-item" routerLink="/registro-candidatos">Registro de Candidatos</a></li>
-                    <li><a class="dropdown-item" routerLink="/registro-empresas">Registro de Empresas</a></li>
-                </ul>
+              <a class="nav-link dropdown-toggle text-primary mt-1" href="#" id="registerDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Registrarse
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="registerDropdown">
+                <li><a class="dropdown-item" routerLink="/registro-candidatos">Registro de Candidatos</a></li>
+                <li><a class="dropdown-item" routerLink="/registro-empresas">Registro de Empresas</a></li>
+              </ul>
             </div>
             <a class="btn btn-outline-primary" routerLink="/login">Iniciar Sesión</a>
-          </div>
+          </ng-container>
+
+          <!-- Mostrar cuando SÍ está autenticado -->
+          <ng-container *ngIf="isAuthenticated()">
+            <!-- Información del usuario y fecha -->
+            <div class="d-flex flex-column text-end me-3 d-none d-md-block">
+              <small class="text-muted mb-0">{{ getCurrentDate() }}</small>
+            </div>
+
+            <!-- Dropdown con opciones del usuario -->
+            <div class="dropdown">
+              <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2" type="button" 
+                      id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle"></i>
+                <span class="d-none d-md-inline">¡Hola, {{ getUserName() }}!</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li>
+                  <h6 class="dropdown-header">
+                    <i class="bi bi-calendar3 me-2"></i>{{ getCurrentDate() }}
+                  </h6>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item d-flex align-items-center gap-2" [routerLink]="getDashboardRoute()">
+                    <i class="bi bi-speedometer2"></i>
+                    Ir al Dashboard
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <button class="dropdown-item d-flex align-items-center gap-2 text-danger" 
+                          type="button" (click)="logout()">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Cerrar Sesión
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
         </div>
       </div>
-    </nav>
-  </header>
-  
+    </div>
+  </nav>
+</header>

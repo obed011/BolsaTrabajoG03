@@ -30,6 +30,7 @@ import { FormularioOfertasComponent } from './empresa/mis-ofertas/formulario-ofe
 export const routes: Routes = [
     { path: 'not-found', component: Pagina404Component },
     { path: '', component: InicioComponent },
+    { path: 'inicio', redirectTo: '', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'registro-candidatos', component: RegistroPostulanteComponent },
     { path: 'registro-empresas', component: RegistroEmpresaComponent },

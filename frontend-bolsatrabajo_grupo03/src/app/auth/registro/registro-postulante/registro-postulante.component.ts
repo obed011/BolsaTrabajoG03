@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService, RegisterPostulanteRequest } from '../../../services/auth.service';
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { FooterComponent } from '../../../shared/footer/footer.component';
@@ -12,7 +12,8 @@ import { FooterComponent } from '../../../shared/footer/footer.component';
     CommonModule,
     ReactiveFormsModule,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    RouterModule
   ],
   templateUrl: './registro-postulante.component.html',
   styleUrl: './registro-postulante.component.css'

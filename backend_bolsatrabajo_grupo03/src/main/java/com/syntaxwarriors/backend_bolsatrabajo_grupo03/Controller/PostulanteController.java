@@ -1,5 +1,6 @@
 package com.syntaxwarriors.backend_bolsatrabajo_grupo03.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntaxwarriors.backend_bolsatrabajo_grupo03.Dto.PostulanteDto;
 import com.syntaxwarriors.backend_bolsatrabajo_grupo03.Dto.UpdatePostulanteDto;
 import com.syntaxwarriors.backend_bolsatrabajo_grupo03.Models.Postulante;
@@ -35,6 +36,21 @@ public class PostulanteController {
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "Error al obtener el perfil: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Obtener curriculum en formato JSON
+     */
+    @GetMapping("curriculum/{id}")
+    public ResponseEntity<Object> getCurriculum(@PathVariable Integer id) {
+        try {
+            String curriculumJson = postulanteService.obtenerCurriculumJson(id);
+            ObjectMapper mapper = new ObjectMapper();
+            Object jsonObject = mapper.readValue(curriculumJson, Object.class);
+            return ResponseEntity.ok(jsonObject);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al procesar el currículum");
         }
     }
 

@@ -32,6 +32,11 @@ public class PostulanteService {
         return convertirADto(postulante);
     }
 
+    //Obtener curriculum en formato JSON
+    public String obtenerCurriculumJson(Integer idPostulante) {
+        return postulanteRepository.getCurriculumJson(idPostulante);
+    }
+
     /**
      * Obtener postulante por ID
      */

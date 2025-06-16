@@ -1,0 +1,18 @@
+.hover-link:hover {
+            color: var(--bs-info) !important;
+            transform: translateY(-1px);
+            transition: all 0.2s ease;
+        }
+
+        .hover-social:hover {
+            color: var(--bs-secondary) !important;
+            transform: scale(1.1);
+            transition: all 0.2s ease;
+        }
+
+        /* Responsividad adicional */
+        @media (max-width: 768px) {
+            .hover-link {
+                font-size: 0.85rem;
+            }
+        }
