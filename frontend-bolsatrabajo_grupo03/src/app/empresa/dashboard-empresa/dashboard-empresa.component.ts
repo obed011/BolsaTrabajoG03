@@ -118,11 +118,11 @@ export class DashboardEmpresaComponent implements OnInit {
   activeMenuItem = 'resumen'; // Elemento activo por defecto
 
   menuItems = [
-    { id: 'resumen', icon: 'bi bi-file-text', label: 'Resumen', route: '/empresa/home' },
-    { id: 'perfil-empresa', icon: 'bi bi-building', label: 'Perfil Empresa', route: '/empresa/perfil' },
+    // { id: 'resumen', icon: 'bi bi-file-text', label: 'Resumen', route: '/empresa/home' },
+    // { id: 'perfil-empresa', icon: 'bi bi-building', label: 'Perfil Empresa', route: '/empresa/perfil' },
     { id: 'mis-ofertas', icon: 'bi bi-briefcase', label: 'Mis Ofertas', route: '/empresa/ofertas' },
-    { id: 'candidatos', icon: 'bi bi-people', label: 'Candidatos', route: '/empresa/candidatos' },
-    { id: 'entrevistas', icon: 'bi bi-chat-dots', label: 'Entrevistas', route: '/empresa/entrevistas' },
+    // { id: 'candidatos', icon: 'bi bi-people', label: 'Candidatos', route: '/empresa/candidatos' },
+    // { id: 'entrevistas', icon: 'bi bi-chat-dots', label: 'Entrevistas', route: '/empresa/entrevistas' },
     { id: 'aplicaciones', icon: 'bi bi-file-earmark-text', label: 'Aplicaciones', route: '/empresa/aplicaciones' },
   ];
 
