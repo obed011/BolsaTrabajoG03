@@ -9,10 +9,14 @@
     <!-- Header del sidebar -->
     <div class="sidebar-header">
       <div class="user-info">
-        <div class="user-avatar">UES</div>
+        <div class="user-avatar">
+          <i class="bi bi-person-circle"></i>
+        </div>
         <div class="user-details">
-          <h6>Universidad de El Salvador</h6>
-          <small>Empresa de Educación</small>
+          <h6>{{ currentUser?.empresa?.nombreEmpresa }}</h6>
+          <small class="text-muted d-block">
+            {{ getCurrentDateTime() }}
+          </small>
         </div>
       </div>
     </div>
