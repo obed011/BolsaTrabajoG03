@@ -51,22 +51,45 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     public AuthResponse login(LoginRequest loginRequest) {
+        // Buscar usuario por correo
+        Usuario usuario = usuarioRepository.findByCorreo(loginRequest.getCorreo())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Verificar si el usuario está bloqueado
+        if (Boolean.FALSE.equals(usuario.getEstado())) {
+            throw new RuntimeException("Usuario bloqueado. Solicita un desbloqueo.");
+        }
+
         try {
+            // Intentar autenticar
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getCorreo(),
                             loginRequest.getContrasena()
                     )
             );
+
+            usuario.setIntentosLoginFallidos(0);
+            usuarioRepository.save(usuario);
+
         } catch (BadCredentialsException e) {
-            throw new RuntimeException("Credenciales incorrectas");
+            int intentos = usuario.getIntentosLoginFallidos() != null ? usuario.getIntentosLoginFallidos() : 0;
+            intentos++;
+            usuario.setIntentosLoginFallidos(intentos);
+            usuarioRepository.save(usuario);
+
+            // Nota: el trigger en la BD debe encargarse de bloquear si intentos == 3
+            if (intentos >= 3) {
+                throw new RuntimeException("Cuenta bloqueada por múltiples intentos fallidos.");
+            } else {
+                int restantes = 3 - intentos;
+                throw new RuntimeException("Credenciales incorrectas. Te quedan " + restantes + " intentos.");
+            }
         }
 
+        // Generar token y responder
         final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getCorreo());
         final String jwt = jwtUtil.generateToken(userDetails);
-
-        Usuario usuario = usuarioRepository.findByCorreo(loginRequest.getCorreo())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         PostulanteResponse postulanteResponse = null;
         EmpresaResponse empresaResponse = null;

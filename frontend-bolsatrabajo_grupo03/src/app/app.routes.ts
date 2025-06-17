@@ -28,6 +28,8 @@ import { FormularioHabilidadesComponent } from './postulante/habilidades_postula
 import { FormularioOfertasComponent } from './empresa/mis-ofertas/formulario-ofertas/formulario-ofertas.component';
 import { EmpleosComponent } from './pages/oferta-empleo/empleos/empleos.component';
 import { DetalleEmpleoComponent } from './pages/oferta-empleo/detalle-empleo/detalle-empleo.component';
+import { DesbloquearUsuarioComponent } from './auth/desbloquear-usuario/desbloquear-usuario.component';
+import { DesbloqueoConfirmadoComponent } from './auth/desbloqueo-confirmado/desbloqueo-confirmado.component';
 
 export const routes: Routes = [
     { path: 'not-found', component: Pagina404Component },
@@ -36,6 +38,8 @@ export const routes: Routes = [
     { path: 'empleos', component: EmpleosComponent },
     { path: 'ofertas/:id', component: DetalleEmpleoComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'desbloquear', component: DesbloquearUsuarioComponent },
+    { path: 'desbloqueo-confirmado', component: DesbloqueoConfirmadoComponent },
     { path: 'registro-candidatos', component: RegistroPostulanteComponent },
     { path: 'registro-empresas', component: RegistroEmpresaComponent },
     {

@@ -67,4 +67,15 @@ public class JwtUtil {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+    public String generarTokenDesbloqueo(String correo) {
+        return Jwts.builder()
+                .setSubject(correo)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) // 10 minutos
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+    public String obtenerCorreoDesdeToken(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 }

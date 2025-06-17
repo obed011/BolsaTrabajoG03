@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthService, LoginRequest } from '../../services/auth.service';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ import { FooterComponent } from '../../shared/footer/footer.component';
     CommonModule,
     ReactiveFormsModule,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -29,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -83,17 +85,17 @@ export class LoginComponent implements OnInit, OnDestroy {
       'EMPRESA': '/empresa',
       'ADMIN': '/admin'
     };
-    
+
     const route = routes[role];
-  
-  if (route) {
-    this.router.navigate([route]);
-  } else {
-    // Manejo más estricto para roles inválidos
-    console.error(`Rol inválido: ${role}`);
-    this.authService.forceLogout();
-    this.errorMessage = 'Rol de usuario inválido. Inicia sesión nuevamente.';
-  }
+
+    if (route) {
+      this.router.navigate([route]);
+    } else {
+      // Manejo más estricto para roles inválidos
+      console.error(`Rol inválido: ${role}`);
+      this.authService.forceLogout();
+      this.errorMessage = 'Rol de usuario inválido. Inicia sesión nuevamente.';
+    }
   }
 
   togglePassword(): void {
@@ -129,7 +131,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loading = false;
     if (response.success) {
       console.log('Login exitoso:', response.data);
-      
+
       // Pequeño delay para asegurar que el estado se actualice
       setTimeout(() => {
         this.redirectToUserDashboard();
@@ -142,9 +144,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   private handleLoginError(error: any): void {
     this.loading = false;
     console.error('Error en login:', error);
-    
+
     if (error.status === 401) {
-      this.errorMessage = 'Credenciales incorrectas. Verifica tu correo y contraseña.';
+      if (error.error && error.error.message) {
+        this.errorMessage = error.error.message;
+      } else {
+        this.errorMessage = 'Credenciales incorrectas. Verifica tu correo y contraseña.';
+      }
     } else if (error.status === 0) {
       this.errorMessage = 'Error de conexión. Verifica tu conexión a internet.';
     } else if (error.error && error.error.message) {

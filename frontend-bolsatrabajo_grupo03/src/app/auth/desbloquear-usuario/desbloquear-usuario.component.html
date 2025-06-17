@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="row justify-content-center w-100">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-sm p-4">
+                <h3 class="text-primary mb-3 text-center">¿Estás bloqueado?</h3>
+                <p class="text-muted text-center">Ingresa tu correo electrónico para solicitar el desbloqueo.</p>
+
+                <form (ngSubmit)="solicitarDesbloqueo()" #form="ngForm" novalidate>
+                    <div class="mb-3">
+                        <label for="correo" class="form-label">Correo electrónico</label>
+                        <input type="email" id="correo" class="form-control" name="correo" [(ngModel)]="correo"
+                            #correoInput="ngModel" required email />
+                        <div *ngIf="correoInput.invalid && correoInput.touched" class="form-text text-danger">
+                            Ingresa un correo válido.
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary w-100" type="submit" [disabled]="form.invalid || loading">
+                        {{ loading ? 'Enviando...' : 'Solicitar Desbloqueo' }}
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

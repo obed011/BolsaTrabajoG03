@@ -71,8 +71,12 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/public/**",
+                                "/api/usuarios/solicitar-desbloqueo",
+                                "/api/usuarios/desbloquear-token"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
