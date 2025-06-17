@@ -1,0 +1,39 @@
+.banner-container {
+    position: relative;
+    height: 80vh;
+    overflow: hidden;
+  }
+  
+  .banner-img {
+    object-fit: cover;
+    height: 100%;
+    filter: brightness(65%);
+  }
+  
+  .banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.4); /* sombra suave */
+  }
+
+  @media screen and (max-width: 768px) {
+    .banner-container {
+      height: 60vh; /* Ajusta la altura para pantallas más pequeñas */
+    }
+  
+    .banner-img {
+      object-fit: cover;
+      height: 100%;
+      filter: brightness(65%);
+    }
+  
+    .banner-overlay {
+      padding: 1rem; /* Reduce el padding en pantallas más pequeñas */
+    }
+    
+  }
+  

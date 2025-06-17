@@ -259,6 +259,10 @@
   .sidebar {
     margin-left: -280px;
   }
+  .page-content {
+    padding: 0.5rem;
+    margin-top: 90px; /* Espacio para el navbar */
+  }
   
   .main-content {
     margin-left: 0;

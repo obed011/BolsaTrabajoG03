@@ -173,6 +173,24 @@
   .sidebar {
     margin-left: -280px;
   }
+  .page-content {
+    padding: 1rem;
+    margin-top: 70px;
+  }
+  
+  .toggle-sidebar {
+    font-size: 1rem; /* Reduce button size */
+    padding: 0.2rem; /* Adjust padding */
+  }
+
+  .btnoferta{
+    font-size: 0.8rem; /* Reduce button size */
+    padding: 0.5rem 0.5rem; /* Adjust padding */
+  }
+
+  .navbar-brand {
+    font-size: 0.9rem; /* Reduce name size */
+  }
   
   .main-content {
     margin-left: 0;

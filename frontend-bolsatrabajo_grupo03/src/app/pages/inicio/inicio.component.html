@@ -1,46 +1,161 @@
 <app-header></app-header>
-<div class="container-fluid vh-100 d-flex flex-column justify-content-center align-items-center mt-4 mb-4">
-    <div class="jumbotron text-center">
-        <h1 class="display-4">Bienvenido a Bolsa de Trabajo</h1>
-        <p class="lead">Encuentra las mejores oportunidades laborales aquí.</p>
-        <hr class="my-4">
-        <p>Explora nuestras ofertas o publica una vacante.</p>
-        <a class="btn btn-primary btn-lg" RouteLink="/empleos" role="button">Ver Ofertas</a>
-        <span style="margin-right: 10px;"></span>
-        <a class="btn btn-secondary btn-lg" href="#" role="button">Publicar Vacante</a>
-    </div>
 
-    <div class="row mt-5">
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="...">
+<!-- Banner superior -->
+<div class="banner-container">
+    <img src="/static/banner.png" alt="Banner principal" class="img-fluid w-100 banner-img">
+    <div class="banner-overlay d-flex flex-column justify-content-center align-items-center text-white text-center">
+        <h1 class="display-3 fw-bold">Bienvenido a Bolsa de Trabajo</h1>
+        <p class="lead">Encuentra las mejores oportunidades laborales aquí.</p>
+        <div class="mt-3">
+            <a class="btn btn-primary btn-lg me-2" [routerLink]="'/empleos'" role="button">Ver Ofertas</a>
+            <a class="btn btn-outline-light btn-lg" [routerLink]="'/login'" role="button">Publicar Vacante</a>
+        </div>
+    </div>
+</div>
+
+<!-- Contenido principal -->
+<div class="container my-5">
+    <div class="row text-center">
+
+        <!-- Ofertas recientes -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow p-3">
+                <div class="text-primary mb-3">
+                    <i class="bi bi-briefcase-fill display-1"></i>
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">Ofertas Recientes</h5>
-                    <p class="card-text">Descubre las últimas ofertas publicadas en nuestra plataforma.</p>
-                    <a href="#" class="btn btn-primary">Ver más</a>
+                    <p class="card-text">Descubre las últimas oportunidades laborales disponibles en nuestra plataforma.
+                    </p>
+                    <a [routerLink]="'/empleos'" class="btn btn-primary">Ver más</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="...">
+
+        <!-- Cómo funciona -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow p-3">
+                <div class="text-warning mb-3">
+                    <i class="bi bi-lightbulb-fill display-1"></i>
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title">Empresas Destacadas</h5>
-                    <p class="card-text">Conoce las empresas que confían en nosotros para encontrar talento.</p>
-                    <a href="#" class="btn btn-primary">Ver más</a>
+                    <h5 class="card-title">¿Cómo Funciona?</h5>
+                    <p class="card-text">Regístrate, completa tu perfil y aplica fácilmente a vacantes.</p>
+                    <button class="btn btn-warning text-white" data-bs-toggle="modal"
+                        data-bs-target="#modalFuncionamiento">
+                        Ver Guía
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="...">
+
+        <!-- Consejos para CV -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow p-3">
+                <div class="text-success mb-3">
+                    <i class="bi bi-file-earmark-person-fill display-1"></i>
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">Consejos para tu CV</h5>
-                    <p class="card-text">Aprende cómo destacar tu perfil profesional con nuestros consejos.</p>
-                    <a href="#" class="btn btn-primary">Leer más</a>
+                    <p class="card-text">Destaca tu perfil profesional con estos consejos clave.</p>
+                    <button class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#modalCV">
+                        Leer más
+                    </button>
                 </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal ¿Cómo Funciona? -->
+<div class="modal fade" id="modalFuncionamiento" tabindex="-1" aria-labelledby="modalFuncionamientoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="modalFuncionamientoLabel">¿Cómo Funciona?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row text-center">
+                    <div class="col-md-4 mb-4">
+                        <i class="bi bi-person-plus-fill display-4 text-warning"></i>
+                        <h6 class="mt-2">1. Regístrate</h6>
+                        <p class="small">Crea tu cuenta en segundos y accede al sistema.</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <i class="bi bi-pencil-square display-4 text-warning"></i>
+                        <h6 class="mt-2">2. Completa tu Perfil</h6>
+                        <p class="small">Agrega tu experiencia, educación y habilidades.</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <i class="bi bi-search display-4 text-warning"></i>
+                        <h6 class="mt-2">3. Explora Vacantes</h6>
+                        <p class="small">Filtra y encuentra el empleo ideal para ti.</p>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <i class="bi bi-send-check-fill display-4 text-warning"></i>
+                        <h6 class="mt-2">4. Postúlate</h6>
+                        <p class="small">Aplica con un solo clic a las vacantes disponibles.</p>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <i class="bi bi-bell-fill display-4 text-warning"></i>
+                        <h6 class="mt-2">5. Recibe Notificaciones</h6>
+                        <p class="small">Sigue el estado de tus postulaciones en tiempo real.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-warning" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
+
+
+<!-- Modal Consejos CV -->
+<div class="modal fade" id="modalCV" tabindex="-1" aria-labelledby="modalCVLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="modalCVLabel">Consejos para tu CV</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row text-center">
+                    <div class="col-md-4 mb-4">
+                        <i class="bi bi-ui-checks display-4 text-success"></i>
+                        <h6 class="mt-2">Estructura Clara</h6>
+                        <p class="small">Organiza tu información por secciones bien definidas.</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <i class="bi bi-award-fill display-4 text-success"></i>
+                        <h6 class="mt-2">Destaca Logros</h6>
+                        <p class="small">Incluye logros medibles, no solo tareas realizadas.</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <i class="bi bi-spellcheck display-4 text-success"></i>
+                        <h6 class="mt-2">Revisa Ortografía</h6>
+                        <p class="small">Un CV limpio y sin errores transmite profesionalismo.</p>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <i class="bi bi-stars display-4 text-success"></i>
+                        <h6 class="mt-2">Usa Palabras Clave</h6>
+                        <p class="small">Adapta tu CV al lenguaje que usan las ofertas de trabajo.</p>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <i class="bi bi-person-bounding-box display-4 text-success"></i>
+                        <h6 class="mt-2">Sé Breve y Directo</h6>
+                        <p class="small">Máximo 2 páginas con lo más relevante de tu perfil.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-success" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <app-footer></app-footer>
