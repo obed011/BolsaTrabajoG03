@@ -78,6 +78,12 @@ public class SecurityConfig {
                                 "/api/usuarios/solicitar-desbloqueo",
                                 "/api/usuarios/desbloquear-token"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/postulantes/ofertas/**",
+                                "/api/categorias-ofertas/**",
+                                "/api/habilidades-tecnicas/**",
+                                "/api/catalogos/**"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/postulantes/*/aplicar/**").hasRole("POSTULANTE")
                         .anyRequest().authenticated()
                 )
