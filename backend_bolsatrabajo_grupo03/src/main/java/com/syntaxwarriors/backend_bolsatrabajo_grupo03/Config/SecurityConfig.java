@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -77,6 +78,7 @@ public class SecurityConfig {
                                 "/api/usuarios/solicitar-desbloqueo",
                                 "/api/usuarios/desbloquear-token"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/postulantes/*/aplicar/**").hasRole("POSTULANTE")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
