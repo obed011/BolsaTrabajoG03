@@ -109,6 +109,8 @@ export class DetalleEmpleoComponent implements OnInit {
         if (error.status === 400) {
           this.error = 'Ya has aplicado a esta oferta anteriormente.';
           this.yaAplicado = true;
+        } else if (error.status === 403) {
+          this.error = 'Solo los postulantes pueden aplicar a una oferta.';
         } else if (error.status === 404) {
           this.error = 'La oferta ya no está disponible.';
         } else {

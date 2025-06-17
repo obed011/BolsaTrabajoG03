@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { forkJoin, Observable, map } from 'rxjs';
+import { AuthService } from './auth.service';
 
 export interface RequerimientoExperiencia {
   idRqExperiencia?: number;
@@ -69,7 +70,7 @@ export interface Aplicacion {
 })
 export class OfertasPostulantesService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   // === OFERTAS PARA POSTULANTES ===
   
@@ -90,7 +91,11 @@ export class OfertasPostulantesService {
 
   // Aplicar a una oferta
   aplicarOferta(postulanteId: number, ofertaId: number): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/postulantes/${postulanteId}/aplicar/${ofertaId}`, {});
+    return this.http.post(
+      `${environment.apiUrl}/postulantes/${postulanteId}/aplicar/${ofertaId}`,
+      {},
+      { headers: this.authService.getAuthHeaders() }
+    );
   }
 
   // Verificar si ya aplicó a una oferta
