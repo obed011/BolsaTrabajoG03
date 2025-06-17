@@ -33,7 +33,7 @@ public interface PostulanteEmpresaRepository extends JpaRepository<AplicacionOfe
         )
         FROM VwPostulantesEmpresa v
         WHERE v.idEmpresa = :empresaId
-        ORDER BY v.fechaAplicacion DESC
+        ORDER BY v.puntaje DESC, v.fechaAplicacion DESC
         """)
     Page<AplicacionEmpresaDTO> findPostulantesByEmpresa(
             @Param("empresaId") Integer empresaId,
